@@ -1,6 +1,6 @@
 'use client';
 
-import { Container, Graphics, Stage } from '@pixi/react';
+import { Graphics, Stage } from '@pixi/react';
 import { useAtomValue } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
 
@@ -14,7 +14,7 @@ const SIMULATION_SIZE = 100; // Size of the simulation in meters (Width = Height
 
 function createSimToCanvasCoord(canvasSize: number) {
   return function simToCanvasCoord(coord: number) {
-    return (coord / SIMULATION_SIZE) * canvasSize;
+    return (coord / SIMULATION_SIZE) * (canvasSize - PADDING * 2) + PADDING;
   };
 }
 
@@ -38,8 +38,7 @@ export function SimulationCanvas() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const containerWidth = dimensions.width - PADDING * 2;
-  const simToCanvasCoord = createSimToCanvasCoord(containerWidth);
+  const simToCanvasCoord = createSimToCanvasCoord(dimensions.width);
 
   return (
     <Card
@@ -52,28 +51,26 @@ export function SimulationCanvas() {
         height={dimensions.height}
         options={{ background: 0xf8fafc }}
       >
-        <Container
-          position={[PADDING, PADDING]}
-          width={containerWidth}
-          height={containerWidth}
-        >
-          <Graphics
-            draw={(g) => {
-              g.clear();
-              g.lineStyle(12, 0x94a3b8, 1); // Line thickness, color, and alpha
-              g.moveTo(0, 0); // Starting point (x, y)
-              g.lineTo(simToCanvasCoord(100), 0); // Ending point (x, y)
-            }}
-          />
-          {pendulumsConfig.map((pendulum) => {
-            const x = simToCanvasCoord(pendulum.anchorPosition);
+        <Graphics
+          draw={(g) => {
+            const startX = simToCanvasCoord(0);
+            const endX = simToCanvasCoord(SIMULATION_SIZE);
             const y = simToCanvasCoord(0);
 
-            return (
-              <XMarker key={pendulum.id} x={x} y={y} color={pendulum.color} />
-            );
-          })}
-        </Container>
+            g.clear();
+            g.lineStyle(12, 0x94a3b8, 1); // Line thickness, color, and alpha
+            g.moveTo(startX, y); // Starting point (x, y)
+            g.lineTo(endX, y); // Ending point (x, y)
+          }}
+        />
+        {pendulumsConfig.map((pendulum) => {
+          const x = simToCanvasCoord(pendulum.anchorPosition);
+          const y = simToCanvasCoord(0);
+
+          return (
+            <XMarker key={pendulum.id} x={x} y={y} color={pendulum.color} />
+          );
+        })}
       </Stage>
     </Card>
   );

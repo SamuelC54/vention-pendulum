@@ -17,8 +17,8 @@ export function PendulumCard({ id }: Props) {
   const pendulumConfig = pendulumsConfig.find((config) => config.id === id);
 
   const setPendulumProperty = (property: string, value: number | string) => {
-    const newPendulumsConfig = [...pendulumsConfig];
-    newPendulumsConfig.map((pendulum) => {
+    let newPendulumsConfig = [...pendulumsConfig];
+    newPendulumsConfig = newPendulumsConfig.map((pendulum) => {
       if (pendulum.id === id) {
         return { ...pendulum, [property]: value };
       }

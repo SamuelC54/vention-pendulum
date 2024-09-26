@@ -3,7 +3,6 @@
 import { Paintbrush } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
   Popover,
   PopoverContent,
@@ -67,12 +66,6 @@ export function ColorPicker({
             />
           ))}
         </div>
-        <Input
-          id="custom"
-          value={color}
-          className="col-span-2 mt-4 h-8"
-          onChange={(e) => setColor(e.currentTarget.value)}
-        />
       </PopoverContent>
     </Popover>
   );
