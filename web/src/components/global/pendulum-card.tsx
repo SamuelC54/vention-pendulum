@@ -67,9 +67,9 @@ export function PendulumCard({ id }: Props) {
       </div>
       <Slider
         defaultValue={[pendulumConfig.anchorPosition]}
-        min={0}
-        max={100}
-        step={1}
+        min={PROPERTIES_LIMIT.anchorPosition.min}
+        max={PROPERTIES_LIMIT.anchorPosition.max}
+        step={PROPERTIES_LIMIT.anchorPosition.step}
         onValueChange={(value) =>
           setPendulumProperty('anchorPosition', value[0])
         }
@@ -85,9 +85,9 @@ export function PendulumCard({ id }: Props) {
       </div>
       <Slider
         defaultValue={[pendulumConfig.startingAngle]}
-        min={-90}
-        max={90}
-        step={1}
+        min={PROPERTIES_LIMIT.startingAngle.min}
+        max={PROPERTIES_LIMIT.startingAngle.max}
+        step={PROPERTIES_LIMIT.startingAngle.step}
         onValueChange={(value) =>
           setPendulumProperty('startingAngle', value[0])
         }
@@ -103,9 +103,9 @@ export function PendulumCard({ id }: Props) {
       </div>
       <Slider
         defaultValue={[pendulumConfig.length]}
-        min={5}
-        max={50}
-        step={0.1}
+        min={PROPERTIES_LIMIT.length.min}
+        max={PROPERTIES_LIMIT.length.max}
+        step={PROPERTIES_LIMIT.length.step}
         onValueChange={(value) => setPendulumProperty('length', value[0])}
       />
 
@@ -119,9 +119,9 @@ export function PendulumCard({ id }: Props) {
       </div>
       <Slider
         defaultValue={[pendulumConfig.radius]}
-        min={4}
-        max={50}
-        step={0.1}
+        min={PROPERTIES_LIMIT.radius.min}
+        max={PROPERTIES_LIMIT.radius.max}
+        step={PROPERTIES_LIMIT.radius.step}
         onValueChange={(value) => setPendulumProperty('radius', value[0])}
       />
 
@@ -135,9 +135,9 @@ export function PendulumCard({ id }: Props) {
       </div>
       <Slider
         defaultValue={[pendulumConfig.mass]}
-        min={0.1}
-        max={10}
-        step={0.1}
+        min={PROPERTIES_LIMIT.mass.min}
+        max={PROPERTIES_LIMIT.mass.max}
+        step={PROPERTIES_LIMIT.mass.step}
         onValueChange={(value) => setPendulumProperty('mass', value[0])}
       />
 

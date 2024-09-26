@@ -2,7 +2,7 @@
 
 import { Graphics, Stage } from '@pixi/react';
 import { useAtomValue } from 'jotai';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { calculateEndPoint } from '@/helpers/calculate-end-point';
 import { pendulumsConfigAtom } from '@/stores/general';
@@ -78,7 +78,7 @@ export function SimulationCanvas() {
           const endY = simToCanvasCoord(endPoint.y);
 
           return (
-            <>
+            <React.Fragment key={pendulum.id}>
               {/* Shaft */}
               <Graphics
                 draw={(g) => {
@@ -106,7 +106,7 @@ export function SimulationCanvas() {
                   g.endFill();
                 }}
               />
-            </>
+            </React.Fragment>
           );
         })}
       </Stage>
