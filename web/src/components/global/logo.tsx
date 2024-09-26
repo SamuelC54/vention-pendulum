@@ -7,6 +7,7 @@ export function Logo() {
     <div className={'flex items-center gap-4'}>
       <div className="flex h-8 items-center">
         <Image
+          priority
           src="/vention-logo-vector.svg"
           alt="Vention"
           width={160}
