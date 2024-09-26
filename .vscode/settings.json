@@ -1,0 +1,30 @@
+{
+  "cSpell.words": [
+    "clsx",
+    "hookform",
+    "lucide",
+    "plusplus",
+    "randomcolor",
+    "tailwindcss",
+    "tanstack",
+    "vention"
+  ],
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.formatOnSave": true,
+  "[javascript][typescript][typescriptreact]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": [
+      "source.addMissingImports",
+      "source.fixAll.eslint"
+    ]
+  },
+  "[json][jsonc][yaml]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "prettier.ignorePath": ".gitignore",
+  "eslint.workingDirectories": ["./web"],
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}
