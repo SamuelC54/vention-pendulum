@@ -6,6 +6,7 @@ import { PublicEnvScript } from 'next-runtime-env';
 import React from 'react';
 
 import { AppHeader } from '@/components/global/app-header';
+import { Controls } from '@/components/global/controls';
 import { SimulationCanvas } from '@/components/global/simulation-canvas';
 import { ReactQueryClientProvider } from '@/lib/react-query/react-query-client-provider';
 import { cn } from '@/lib/utils';
@@ -30,8 +31,9 @@ export default function Page() {
         >
           <div className="flex h-full flex-col">
             <AppHeader />
-            <div className="h-full flex-1 overflow-hidden p-4">
+            <div className="flex h-full flex-1 gap-6 overflow-hidden p-4">
               <SimulationCanvas />
+              <Controls />
             </div>
           </div>
         </body>
