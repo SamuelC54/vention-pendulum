@@ -1,12 +1,16 @@
 import { Graphics } from '@pixi/react';
 
-export function XMarker({
-  x = 0,
-  y = 0,
-  size = 10,
-  color = 'ff0000',
-  lineWidth = 6,
-}) {
+interface Props {
+  x: number;
+  y: number;
+  size: number;
+  color: string;
+  lineWidth: number;
+}
+
+export function XMarker(props: Props) {
+  const { x, y, size, color, lineWidth } = props;
+
   return (
     <Graphics
       draw={(g) => {

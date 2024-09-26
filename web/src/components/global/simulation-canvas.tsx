@@ -10,7 +10,7 @@ import { Card } from '../ui/card';
 import { XMarker } from './x-marker';
 
 const PADDING = 32;
-const SIMULATION_SIZE = 100; // Size of the simulation in meters (Width = Height)
+const SIMULATION_SIZE = 100; // Size of the simulation in meters (assuming Width = Height)
 
 function createSimToCanvasCoord(canvasSize: number) {
   return function simToCanvasCoord(coord: number) {
@@ -68,7 +68,14 @@ export function SimulationCanvas() {
           const y = simToCanvasCoord(0);
 
           return (
-            <XMarker key={pendulum.id} x={x} y={y} color={pendulum.color} />
+            <XMarker
+              key={pendulum.id}
+              x={x}
+              y={y}
+              color={pendulum.color}
+              size={8}
+              lineWidth={6}
+            />
           );
         })}
       </Stage>
