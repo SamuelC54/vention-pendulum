@@ -12,6 +12,14 @@ interface Props {
   id: string;
 }
 
+const PROPERTIES_LIMIT = {
+  anchorPosition: { min: 0, max: 100, step: 1 },
+  startingAngle: { min: -90, max: 90, step: 1 },
+  length: { min: 5, max: 50, step: 0.1 },
+  radius: { min: 4, max: 50, step: 0.1 },
+  mass: { min: 0.1, max: 10, step: 0.1 },
+};
+
 export function PendulumCard({ id }: Props) {
   const [pendulumsConfig, setPendulumsConfig] = useAtom(pendulumsConfigAtom);
   const pendulumConfig = pendulumsConfig.find((config) => config.id === id);
@@ -85,6 +93,38 @@ export function PendulumCard({ id }: Props) {
         }
       />
 
+      {/* Length */}
+      <div className="flex items-center">
+        <div className="text-xs">Length (m)</div>
+        <span className="flex-1" />
+        <div className="text-xs text-slate-600">
+          {pendulumConfig.length.toFixed(1)} m
+        </div>
+      </div>
+      <Slider
+        defaultValue={[pendulumConfig.length]}
+        min={5}
+        max={50}
+        step={0.1}
+        onValueChange={(value) => setPendulumProperty('length', value[0])}
+      />
+
+      {/* Radius */}
+      <div className="flex items-center">
+        <div className="text-xs">Radius (m)</div>
+        <span className="flex-1" />
+        <div className="text-xs text-slate-600">
+          {pendulumConfig.radius.toFixed(1)} m
+        </div>
+      </div>
+      <Slider
+        defaultValue={[pendulumConfig.radius]}
+        min={4}
+        max={50}
+        step={0.1}
+        onValueChange={(value) => setPendulumProperty('radius', value[0])}
+      />
+
       {/* Mass */}
       <div className="flex items-center">
         <div className="text-xs">Mass (kg)</div>
@@ -99,38 +139,6 @@ export function PendulumCard({ id }: Props) {
         max={10}
         step={0.1}
         onValueChange={(value) => setPendulumProperty('mass', value[0])}
-      />
-
-      {/* Length */}
-      <div className="flex items-center">
-        <div className="text-xs">Length (m)</div>
-        <span className="flex-1" />
-        <div className="text-xs text-slate-600">
-          {pendulumConfig.length.toFixed(1)} m
-        </div>
-      </div>
-      <Slider
-        defaultValue={[pendulumConfig.length]}
-        min={0.1}
-        max={10}
-        step={0.1}
-        onValueChange={(value) => setPendulumProperty('length', value[0])}
-      />
-
-      {/* Radius */}
-      <div className="flex items-center">
-        <div className="text-xs">Radius (m)</div>
-        <span className="flex-1" />
-        <div className="text-xs text-slate-600">
-          {pendulumConfig.radius.toFixed(2)} m
-        </div>
-      </div>
-      <Slider
-        defaultValue={[pendulumConfig.radius]}
-        min={0.01}
-        max={1}
-        step={0.01}
-        onValueChange={(value) => setPendulumProperty('radius', value[0])}
       />
 
       {/* Color */}

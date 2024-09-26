@@ -4,6 +4,7 @@ import { Graphics, Stage } from '@pixi/react';
 import { useAtomValue } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
 
+import { calculateEndPoint } from '@/helpers/calculate-end-point';
 import { pendulumsConfigAtom } from '@/stores/general';
 
 import { Card } from '../ui/card';
@@ -66,16 +67,46 @@ export function SimulationCanvas() {
         {pendulumsConfig.map((pendulum) => {
           const x = simToCanvasCoord(pendulum.anchorPosition);
           const y = simToCanvasCoord(0);
+          const endPoint = calculateEndPoint(
+            pendulum.anchorPosition,
+            0,
+            pendulum.startingAngle,
+            pendulum.length,
+          );
+
+          const endX = simToCanvasCoord(endPoint.x);
+          const endY = simToCanvasCoord(endPoint.y);
 
           return (
-            <XMarker
-              key={pendulum.id}
-              x={x}
-              y={y}
-              color={pendulum.color}
-              size={8}
-              lineWidth={6}
-            />
+            <>
+              {/* Shaft */}
+              <Graphics
+                draw={(g) => {
+                  g.clear();
+                  g.lineStyle(4, pendulum.color, 1); // Line thickness, color, and alpha
+                  g.moveTo(x, y); // Starting point (x, y)
+                  g.lineTo(endX, endY); // Ending point (x, y)
+                }}
+              />
+              {/* Anchor */}
+              <XMarker
+                key={pendulum.id}
+                x={x}
+                y={y}
+                color={pendulum.color}
+                size={8}
+                lineWidth={6}
+              />
+              {/* Mass */}
+              <Graphics
+                draw={(g) => {
+                  g.clear();
+                  g.beginFill(pendulum.color);
+                  g.drawCircle(endX, endY, pendulum.radius);
+                  g.endFill();
+                }}
+              />
+            </>
           );
         })}
       </Stage>
