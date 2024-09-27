@@ -50,7 +50,7 @@ export function SimulationCanvas() {
       <Stage
         width={dimensions.width}
         height={dimensions.height}
-        options={{ background: 0xf8fafc }}
+        options={{ background: 0xf8fafc, resolution: 2 }}
       >
         <Graphics
           draw={(g) => {

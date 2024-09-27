@@ -2,11 +2,13 @@
 
 import { useAtom } from 'jotai';
 
+import { useGetHealthcheck } from '@/services/get-healthcheck';
 import { pendulumsConfigAtom } from '@/stores/general';
 
 import { Card } from '../ui/card';
 import { Slider } from '../ui/slider';
 import { ColorPicker } from './color-picker';
+import { LoadingSpinner } from './loading-spinner';
 
 interface Props {
   id: string;
@@ -23,6 +25,12 @@ const PROPERTIES_LIMIT = {
 export function PendulumCard({ id }: Props) {
   const [pendulumsConfig, setPendulumsConfig] = useAtom(pendulumsConfigAtom);
   const pendulumConfig = pendulumsConfig.find((config) => config.id === id);
+
+  const {
+    data: healthcheckData,
+    error: healthcheckError,
+    isLoading: healthcheckIsLoading,
+  } = useGetHealthcheck(id);
 
   const setPendulumProperty = (property: string, value: number | string) => {
     let newPendulumsConfig = [...pendulumsConfig];
@@ -54,7 +62,15 @@ export function PendulumCard({ id }: Props) {
       <div className="flex items-center">
         <div className="text-base font-semibold">Pendulum {id}</div>
         <span className="flex-1" />
-        <div className="text-xs text-green-500">Connected</div>
+        {healthcheckIsLoading && (
+          <LoadingSpinner className="h-4 text-gray-300" />
+        )}
+        {healthcheckError && (
+          <div className="text-xs text-red-500">Connection Error</div>
+        )}
+        {!healthcheckError && healthcheckData && (
+          <div className="text-xs text-green-500">Connected</div>
+        )}
       </div>
 
       {/* Anchor Position */}
