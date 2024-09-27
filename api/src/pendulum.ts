@@ -84,10 +84,10 @@ class Pendulum {
     this.state = {
       ...this.state,
       ...pendulumState,
-      state: "stopped",
+      state: "running",
     };
     this.updateMassPosition();
-    this.stop(); // Ensure the simulation is stopped
+    this.start(); // Ensure the simulation is started
   }
 
   public getPendulumState(): PendulumState {
