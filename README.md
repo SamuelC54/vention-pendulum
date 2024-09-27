@@ -6,3 +6,8 @@
 - Run the following commands:
   - `npm install`
   - `npm run dev`
+
+- Open another terminal and navigate to the `./api` folder
+- Run the following commands:
+  - `npm install`
+  - `npm run dev`

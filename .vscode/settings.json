@@ -1,13 +1,17 @@
 {
   "cSpell.words": [
     "clsx",
+    "fastify",
+    "healthcheck",
     "hookform",
     "lucide",
+    "openapi",
     "pixi",
     "plusplus",
     "randomcolor",
     "tailwindcss",
     "tanstack",
+    "tsnd",
     "vention"
   ],
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
