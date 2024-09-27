@@ -2,7 +2,7 @@ import buildServer from "./server";
 
 const server = buildServer();
 
-const port = process.argv[2] || 3001;
+const port = process.env.PORT || 3001;
 
 async function main() {
   try {

@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  server1:
+    container_name: pendulum-1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+    volumes:
+      - .:/app
+    command: npm run dev
+
+  server2:
+    container_name: pendulum-2
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      - PORT=3002
+    volumes:
+      - .:/app
+    command: npm run dev
+
+  server3:
+    container_name: pendulum-3
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3003"
+    environment:
+      - PORT=3003
+    volumes:
+      - .:/app
+    command: npm run dev
+
+  server4:
+    container_name: pendulum-4
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3004:3004"
+    environment:
+      - PORT=3004
+    volumes:
+      - .:/app
+    command: npm run dev
+
+  server5:
+    container_name: pendulum-5
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3005:3005"
+    environment:
+      - PORT=3005
+    volumes:
+      - .:/app
+    command: npm run dev
