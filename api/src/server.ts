@@ -14,10 +14,6 @@ function buildServer() {
     methods: ["GET", "POST"], // Specify allowed HTTP methods
   });
 
-  server.get("/healthcheck", async function () {
-    return { status: "OK" };
-  });
-
   server.register(
     swagger,
     withRefResolver({
@@ -32,6 +28,27 @@ function buildServer() {
         },
       },
     })
+  );
+
+  server.get(
+    "/healthcheck",
+    {
+      schema: {
+        description: "Health check endpoint",
+        tags: ["Health"],
+        response: {
+          200: {
+            type: "object",
+            properties: {
+              status: { type: "string" },
+            },
+          },
+        },
+      },
+    },
+    async function () {
+      return { status: "OK" };
+    }
   );
 
   return server;
