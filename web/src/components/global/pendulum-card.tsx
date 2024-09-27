@@ -1,7 +1,9 @@
 'use client';
 
 import { useAtom } from 'jotai';
+import { set } from 'lodash';
 
+import { degreesToRads, radsToDegrees } from '@/helpers/angles';
 import { useGetHealthcheck } from '@/services/get-healthcheck';
 import { pendulumsConfigAtom } from '@/stores/general';
 
@@ -35,10 +37,11 @@ export function PendulumCard({ id }: Props) {
   const setPendulumProperty = (property: string, value: number | string) => {
     let newPendulumsConfig = [...pendulumsConfig];
     newPendulumsConfig = newPendulumsConfig.map((pendulum) => {
+      const newPendulum = { ...pendulum };
       if (pendulum.id === id) {
-        return { ...pendulum, [property]: value };
+        set(newPendulum, property, value);
       }
-      return pendulum;
+      return newPendulum;
     });
     setPendulumsConfig(newPendulumsConfig);
   };
@@ -78,16 +81,16 @@ export function PendulumCard({ id }: Props) {
         <div className="text-xs">Anchor position (m)</div>
         <span className="flex-1" />
         <div className="text-xs text-slate-600">
-          {pendulumConfig.anchorPosition} m
+          {pendulumConfig.anchorPosition.x} m
         </div>
       </div>
       <Slider
-        defaultValue={[pendulumConfig.anchorPosition]}
+        defaultValue={[pendulumConfig.anchorPosition.x]}
         min={PROPERTIES_LIMIT.anchorPosition.min}
         max={PROPERTIES_LIMIT.anchorPosition.max}
         step={PROPERTIES_LIMIT.anchorPosition.step}
         onValueChange={(value) =>
-          setPendulumProperty('anchorPosition', value[0])
+          setPendulumProperty('anchorPosition.x', value[0])
         }
       />
 
@@ -96,16 +99,16 @@ export function PendulumCard({ id }: Props) {
         <div className="text-xs">Starting angle (°)</div>
         <span className="flex-1" />
         <div className="text-xs text-slate-600">
-          {pendulumConfig.startingAngle}°
+          {radsToDegrees(pendulumConfig.angle).toFixed(0)}°
         </div>
       </div>
       <Slider
-        defaultValue={[pendulumConfig.startingAngle]}
+        defaultValue={[radsToDegrees(pendulumConfig.angle)]}
         min={PROPERTIES_LIMIT.startingAngle.min}
         max={PROPERTIES_LIMIT.startingAngle.max}
         step={PROPERTIES_LIMIT.startingAngle.step}
         onValueChange={(value) =>
-          setPendulumProperty('startingAngle', value[0])
+          setPendulumProperty('angle', degreesToRads(value[0]))
         }
       />
 

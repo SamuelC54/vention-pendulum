@@ -39,6 +39,7 @@
         "project": "./tsconfig.json"
       },
       "rules": {
+        "no-restricted-syntax": "off",
         "import/extensions": ["error", "never"],
         "import/no-unresolved": ["error", { "ignore": ["geist/font/sans"] }],
         "no-console": ["error", { "allow": ["warn", "error"] }],

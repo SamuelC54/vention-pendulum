@@ -1,21 +1,7 @@
+import { PendulumState, Position } from "./utils/types";
+
 const GRAVITY = 9.81; // in m/s^2
 const TIME_STEP: number = 0.01; // in seconds
-
-interface Position {
-  x: number;
-  y: number;
-}
-
-export interface PendulumState {
-  anchorPosition: Position; // Anchor position
-  massPosition: Position; // Mass position
-  angle: number; // Angle in radians
-  length: number; // Length of the pendulum
-  radius: number; // Mass radius
-  mass: number; // Mass in kg
-  velocity: number;
-  state: "running" | "stopped";
-}
 
 class Pendulum {
   private state: PendulumState;
@@ -23,25 +9,17 @@ class Pendulum {
 
   constructor() {
     this.state = {
+      id: "0",
       anchorPosition: { x: 0, y: 0 },
-      massPosition: { x: 0, y: 0 },
       angle: 0,
       length: 1,
       radius: 0.1,
       mass: 1,
       velocity: 0,
       state: "stopped",
+      color: "#FF0000",
     };
     this.simulationInterval = null;
-    this.updateMassPosition();
-  }
-
-  private updateMassPosition(): void {
-    const { anchorPosition, angle, length } = this.state;
-    this.state.massPosition = {
-      x: anchorPosition.x + length * Math.sin(angle),
-      y: anchorPosition.y + length * Math.cos(angle),
-    };
   }
 
   private simulateStep(): void {
@@ -50,8 +28,15 @@ class Pendulum {
       const acceleration = -(GRAVITY / length) * Math.sin(angle);
       this.state.velocity += acceleration * TIME_STEP;
       this.state.angle += this.state.velocity * TIME_STEP;
-      this.updateMassPosition();
     }
+  }
+
+  private getMassPosition(): Position {
+    const { anchorPosition, angle, length } = this.state;
+    return {
+      x: anchorPosition.x + length * Math.sin(angle),
+      y: anchorPosition.y + length * Math.cos(angle),
+    };
   }
 
   public start(): void {
@@ -80,13 +65,10 @@ class Pendulum {
     }
   }
 
-  public setInitialPosition(pendulumState: Partial<PendulumState>): void {
+  public setInitialState(pendulumState: PendulumState): void {
     this.state = {
-      ...this.state,
       ...pendulumState,
-      state: "running",
     };
-    this.updateMassPosition();
     this.start(); // Ensure the simulation is started
   }
 

@@ -3,7 +3,8 @@ import swagger from "fastify-swagger";
 import { withRefResolver } from "fastify-zod";
 import fastifyCors from "fastify-cors";
 import { version } from "../package.json";
-import Pendulum, { PendulumState } from "./pendulum";
+import Pendulum from "./pendulum";
+import { PendulumState } from "./utils/types";
 
 function buildServer() {
   const server = Fastify();
@@ -54,15 +55,8 @@ function buildServer() {
   const PendulumStateSchema = {
     type: "object",
     properties: {
+      id: { type: "string" },
       anchorPosition: {
-        type: "object",
-        properties: {
-          x: { type: "number" },
-          y: { type: "number" },
-        },
-        required: ["x", "y"],
-      },
-      massPosition: {
         type: "object",
         properties: {
           x: { type: "number" },
@@ -75,31 +69,27 @@ function buildServer() {
       radius: { type: "number" },
       mass: { type: "number" },
       velocity: { type: "number" },
+      color: { type: "string" },
       state: { type: "string", enum: ["running", "stopped"] },
     },
     required: [
+      "id",
       "anchorPosition",
-      "massPosition",
       "angle",
       "length",
       "radius",
       "mass",
       "velocity",
+      "color",
       "state",
     ],
   };
 
-  const SetInitialPositionSchema = {
+  const SetInitialStateSchema = {
     type: "object",
     properties: {
+      id: { type: "string" },
       anchorPosition: {
-        type: "object",
-        properties: {
-          x: { type: "number" },
-          y: { type: "number" },
-        },
-      },
-      massPosition: {
         type: "object",
         properties: {
           x: { type: "number" },
@@ -111,6 +101,7 @@ function buildServer() {
       radius: { type: "number" },
       mass: { type: "number" },
       velocity: { type: "number" },
+      color: { type: "string" },
     },
   };
 
@@ -185,14 +176,14 @@ function buildServer() {
     }
   );
 
-  // Endpoint to Set Initial Position
+  // Endpoint to Set Initial State
   server.post(
-    "/pendulum/set-initial-position",
+    "/pendulum/set-initial-state",
     {
       schema: {
-        description: "Set the initial position and state of the pendulum",
+        description: "Set the initial state of the pendulum",
         tags: ["Pendulum"],
-        body: SetInitialPositionSchema,
+        body: SetInitialStateSchema,
         response: {
           200: {
             type: "object",
@@ -206,13 +197,13 @@ function buildServer() {
     },
     async function (
       request: FastifyRequest<{
-        Body: Partial<PendulumState>;
+        Body: PendulumState;
       }>
     ) {
-      const initialState: Partial<PendulumState> = request.body;
-      Pendulum.setInitialPosition(initialState);
+      const initialState: PendulumState = request.body;
+      Pendulum.setInitialState(initialState);
       return {
-        message: "Pendulum initial position set",
+        message: "Pendulum initial state set",
         state: Pendulum.getPendulumState(),
       };
     }

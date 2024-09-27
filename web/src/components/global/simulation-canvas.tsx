@@ -5,7 +5,9 @@ import { useAtomValue } from 'jotai';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { calculateEndPoint } from '@/helpers/calculate-end-point';
-import { pendulumsConfigAtom } from '@/stores/general';
+import { useGetAllPendulumState } from '@/helpers/use-get-all-pendulum-state';
+import { pendulumsConfigAtom, simulationStateAtom } from '@/stores/general';
+import { PendulumState } from '@/utils/types';
 
 import { Card } from '../ui/card';
 import { XMarker } from './x-marker';
@@ -23,6 +25,15 @@ export function SimulationCanvas() {
   const cardRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   const pendulumsConfig = useAtomValue(pendulumsConfigAtom);
+  const simulationState = useAtomValue(simulationStateAtom);
+
+  const isSimulationRunning = simulationState === 'running';
+
+  const serverPendulumState = useGetAllPendulumState();
+
+  const pendulums: PendulumState[] = !isSimulationRunning
+    ? pendulumsConfig
+    : serverPendulumState;
 
   // Adjust the stage size based on the Card's size
   useEffect(() => {
@@ -64,13 +75,13 @@ export function SimulationCanvas() {
             g.lineTo(endX, y); // Ending point (x, y)
           }}
         />
-        {pendulumsConfig.map((pendulum) => {
-          const x = simToCanvasCoord(pendulum.anchorPosition);
-          const y = simToCanvasCoord(0);
+        {pendulums.map((pendulum) => {
+          const x = simToCanvasCoord(pendulum.anchorPosition.x);
+          const y = simToCanvasCoord(pendulum.anchorPosition.y);
           const endPoint = calculateEndPoint(
-            pendulum.anchorPosition,
-            0,
-            pendulum.startingAngle,
+            pendulum.anchorPosition.x,
+            pendulum.anchorPosition.y,
+            pendulum.angle,
             pendulum.length,
           );
 

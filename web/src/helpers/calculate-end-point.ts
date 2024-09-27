@@ -4,10 +4,8 @@ export function calculateEndPoint(
   angle: number,
   length: number,
 ): { x: number; y: number } {
-  const radians = (angle * Math.PI) / 180;
-
-  const endX = startX + length * Math.sin(radians);
-  const endY = startY + length * Math.cos(radians);
+  const endX = startX + length * Math.sin(angle);
+  const endY = startY + length * Math.cos(angle);
 
   return { x: endX, y: endY };
 }
