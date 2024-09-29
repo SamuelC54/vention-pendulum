@@ -10,15 +10,16 @@ import {
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 
-export function ColorPicker({
-  color,
-  setColor,
-  className,
-}: {
+interface Props {
   color: string;
   setColor: (background: string) => void;
   className?: string;
-}) {
+  disabled?: boolean;
+}
+
+export function ColorPicker(props: Props) {
+  const { color, setColor, className, disabled } = props;
+
   const solids = [
     '#3b82f6', // blue-500
     '#f97316', // orange-500
@@ -34,6 +35,7 @@ export function ColorPicker({
     <Popover>
       <PopoverTrigger asChild>
         <Button
+          disabled={disabled}
           variant={'outline'}
           size={'sm'}
           className={cn(

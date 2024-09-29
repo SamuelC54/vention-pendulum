@@ -4,6 +4,7 @@ import { useAtom } from 'jotai';
 import { set } from 'lodash';
 
 import { degreesToRads, radsToDegrees } from '@/helpers/angles';
+import { cn } from '@/lib/utils';
 import { useGetHealthcheck } from '@/services/get-healthcheck';
 import { pendulumsConfigAtom } from '@/stores/general';
 
@@ -14,6 +15,7 @@ import { LoadingSpinner } from './loading-spinner';
 
 interface Props {
   id: string;
+  disabled?: boolean;
 }
 
 const PROPERTIES_LIMIT = {
@@ -21,10 +23,11 @@ const PROPERTIES_LIMIT = {
   startingAngle: { min: -90, max: 90, step: 1 },
   length: { min: 5, max: 50, step: 0.1 },
   radius: { min: 4, max: 50, step: 0.1 },
-  mass: { min: 0.1, max: 10, step: 0.1 },
 };
 
-export function PendulumCard({ id }: Props) {
+export function PendulumCard(props: Props) {
+  const { id, disabled = false } = props;
+
   const [pendulumsConfig, setPendulumsConfig] = useAtom(pendulumsConfigAtom);
   const pendulumConfig = pendulumsConfig.find((config) => config.id === id);
 
@@ -60,7 +63,7 @@ export function PendulumCard({ id }: Props) {
     );
 
   return (
-    <Card className="flex flex-col gap-2 p-4">
+    <Card className={cn('flex flex-col gap-2 p-4', disabled && 'opacity-60')}>
       {/* Header */}
       <div className="flex items-center">
         <div className="text-base font-semibold">Pendulum {id}</div>
@@ -92,6 +95,7 @@ export function PendulumCard({ id }: Props) {
         onValueChange={(value) =>
           setPendulumProperty('anchorPosition.x', value[0])
         }
+        disabled={disabled}
       />
 
       {/* Starting Angle */}
@@ -110,6 +114,7 @@ export function PendulumCard({ id }: Props) {
         onValueChange={(value) =>
           setPendulumProperty('angle', degreesToRads(value[0]))
         }
+        disabled={disabled}
       />
 
       {/* Length */}
@@ -126,6 +131,7 @@ export function PendulumCard({ id }: Props) {
         max={PROPERTIES_LIMIT.length.max}
         step={PROPERTIES_LIMIT.length.step}
         onValueChange={(value) => setPendulumProperty('length', value[0])}
+        disabled={disabled}
       />
 
       {/* Radius */}
@@ -142,6 +148,7 @@ export function PendulumCard({ id }: Props) {
         max={PROPERTIES_LIMIT.radius.max}
         step={PROPERTIES_LIMIT.radius.step}
         onValueChange={(value) => setPendulumProperty('radius', value[0])}
+        disabled={disabled}
       />
 
       {/* Color */}
@@ -150,6 +157,7 @@ export function PendulumCard({ id }: Props) {
         <ColorPicker
           color={pendulumConfig.color}
           setColor={(color) => setPendulumProperty('color', color)}
+          disabled={disabled}
         />
       </div>
     </Card>
