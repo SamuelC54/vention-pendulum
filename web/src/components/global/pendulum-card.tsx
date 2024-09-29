@@ -144,22 +144,6 @@ export function PendulumCard({ id }: Props) {
         onValueChange={(value) => setPendulumProperty('radius', value[0])}
       />
 
-      {/* Mass */}
-      <div className="flex items-center">
-        <div className="text-xs">Mass (kg)</div>
-        <span className="flex-1" />
-        <div className="text-xs text-slate-600">
-          {pendulumConfig.mass.toFixed(1)} kg
-        </div>
-      </div>
-      <Slider
-        defaultValue={[pendulumConfig.mass]}
-        min={PROPERTIES_LIMIT.mass.min}
-        max={PROPERTIES_LIMIT.mass.max}
-        step={PROPERTIES_LIMIT.mass.step}
-        onValueChange={(value) => setPendulumProperty('mass', value[0])}
-      />
-
       {/* Color */}
       <div>
         <div className="mb-1 text-xs">Color</div>

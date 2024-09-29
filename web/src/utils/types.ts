@@ -11,7 +11,6 @@ export interface PendulumState {
   angle: number; // Angle in radians
   length: number; // Length of the pendulum
   radius: number; // Mass radius
-  mass: number; // Mass in kg
   velocity: number;
   color: string; // Color of the pendulum
   state: 'running' | 'stopped';

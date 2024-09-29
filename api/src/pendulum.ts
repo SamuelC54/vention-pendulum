@@ -14,7 +14,6 @@ class Pendulum {
       angle: 0,
       length: 1,
       radius: 0.1,
-      mass: 1,
       velocity: 0,
       state: "stopped",
       color: "#FF0000",
