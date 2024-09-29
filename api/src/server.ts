@@ -10,7 +10,7 @@ function buildServer() {
   const server = Fastify();
 
   server.register(fastifyCors, {
-    origin: "http://localhost:3000", // Allow this specific origin
+    origin: true, // Allow all origins
     methods: ["GET", "POST"], // Specify allowed HTTP methods
   });
 
@@ -70,6 +70,11 @@ function buildServer() {
       velocity: { type: "number" },
       color: { type: "string" },
       state: { type: "string", enum: ["running", "stopped"] },
+      hasCollision: { type: "boolean" },
+      neighborsURL: {
+        type: "array",
+        items: { type: "string" },
+      },
     },
     required: [
       "id",
@@ -80,6 +85,8 @@ function buildServer() {
       "velocity",
       "color",
       "state",
+      "hasCollision",
+      "neighborsURL",
     ],
   };
 
@@ -93,13 +100,30 @@ function buildServer() {
           x: { type: "number" },
           y: { type: "number" },
         },
+        required: ["x", "y"],
       },
       angle: { type: "number" },
       length: { type: "number" },
       radius: { type: "number" },
       velocity: { type: "number" },
       color: { type: "string" },
+      hasCollision: { type: "boolean" },
+      neighborsURL: {
+        type: "array",
+        items: { type: "string" },
+      },
     },
+    required: [
+      "id",
+      "anchorPosition",
+      "angle",
+      "length",
+      "radius",
+      "velocity",
+      "color",
+      "hasCollision",
+      "neighborsURL",
+    ],
   };
 
   // Endpoint to Get Pendulum State

@@ -2,12 +2,15 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useSetAtom } from 'jotai';
 
+import { assignNeighbors } from '@/helpers/assign-neighbors';
 import { simulationStateAtom } from '@/stores/general';
 import { pendulumServerLUT } from '@/utils/pendulum-server-lut';
 import { PendulumState } from '@/utils/types';
 
 async function setPendulumsInitialState(newStates: PendulumState[]) {
-  const requests = newStates.map((newState) =>
+  const pendulumStatesWithNeighbors = assignNeighbors(newStates);
+
+  const requests = pendulumStatesWithNeighbors.map((newState) =>
     axios.post(
       `${pendulumServerLUT[newState.id]}/pendulum/set-initial-state`,
       newState,

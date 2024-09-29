@@ -22,7 +22,7 @@ const PROPERTIES_LIMIT = {
   anchorPosition: { min: 0, max: 100, step: 1 },
   startingAngle: { min: -90, max: 90, step: 1 },
   length: { min: 5, max: 50, step: 0.1 },
-  radius: { min: 4, max: 50, step: 0.1 },
+  radius: { min: 1, max: 5, step: 0.1 },
 };
 
 export function PendulumCard(props: Props) {

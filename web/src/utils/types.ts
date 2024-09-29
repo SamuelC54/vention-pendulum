@@ -14,4 +14,6 @@ export interface PendulumState {
   velocity: number;
   color: string; // Color of the pendulum
   state: 'running' | 'stopped';
+  hasCollision: boolean;
+  neighborsURL: string[];
 }

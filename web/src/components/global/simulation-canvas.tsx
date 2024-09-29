@@ -15,9 +15,15 @@ import { XMarker } from './x-marker';
 const PADDING = 32;
 const SIMULATION_SIZE = 100; // Size of the simulation in meters (assuming Width = Height)
 
-function createSimToCanvasCoord(canvasSize: number) {
-  return function simToCanvasCoord(coord: number) {
-    return (coord / SIMULATION_SIZE) * (canvasSize - PADDING * 2) + PADDING;
+function createUnitConverter(canvasSize: number) {
+  return function convertSimToCanvasUnit(
+    coord: number,
+    applyPadding: boolean = true,
+  ) {
+    if (applyPadding) {
+      return (coord / SIMULATION_SIZE) * (canvasSize - PADDING * 2) + PADDING;
+    }
+    return (coord / SIMULATION_SIZE) * canvasSize;
   };
 }
 
@@ -51,7 +57,7 @@ export function SimulationCanvas() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const simToCanvasCoord = createSimToCanvasCoord(dimensions.width);
+  const convertSimToCanvasUnit = createUnitConverter(dimensions.width);
 
   return (
     <Card
@@ -66,9 +72,9 @@ export function SimulationCanvas() {
       >
         <Graphics
           draw={(g) => {
-            const startX = simToCanvasCoord(0);
-            const endX = simToCanvasCoord(SIMULATION_SIZE);
-            const y = simToCanvasCoord(0);
+            const startX = convertSimToCanvasUnit(0);
+            const endX = convertSimToCanvasUnit(SIMULATION_SIZE);
+            const y = convertSimToCanvasUnit(0);
 
             g.clear();
             g.lineStyle(12, 0x94a3b8, 1); // Line thickness, color, and alpha
@@ -77,8 +83,8 @@ export function SimulationCanvas() {
           }}
         />
         {pendulums.map((pendulum) => {
-          const x = simToCanvasCoord(pendulum.anchorPosition.x);
-          const y = simToCanvasCoord(pendulum.anchorPosition.y);
+          const x = convertSimToCanvasUnit(pendulum.anchorPosition.x);
+          const y = convertSimToCanvasUnit(pendulum.anchorPosition.y);
           const endPoint = calculateEndPoint(
             pendulum.anchorPosition.x,
             pendulum.anchorPosition.y,
@@ -86,8 +92,8 @@ export function SimulationCanvas() {
             pendulum.length,
           );
 
-          const endX = simToCanvasCoord(endPoint.x);
-          const endY = simToCanvasCoord(endPoint.y);
+          const endX = convertSimToCanvasUnit(endPoint.x);
+          const endY = convertSimToCanvasUnit(endPoint.y);
 
           return (
             <React.Fragment key={pendulum.id}>
@@ -113,8 +119,15 @@ export function SimulationCanvas() {
               <Graphics
                 draw={(g) => {
                   g.clear();
+                  if (pendulum.hasCollision) {
+                    g.lineStyle(5, 0x000000); // Draw a black border around the circle if there is a collision
+                  }
                   g.beginFill(pendulum.color);
-                  g.drawCircle(endX, endY, pendulum.radius);
+                  g.drawCircle(
+                    endX,
+                    endY,
+                    convertSimToCanvasUnit(pendulum.radius, false),
+                  );
                   g.endFill();
                 }}
               />

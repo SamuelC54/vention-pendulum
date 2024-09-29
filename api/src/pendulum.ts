@@ -1,11 +1,15 @@
 import { PendulumState, Position } from "./utils/types";
+import fetch from "node-fetch";
 
 const GRAVITY = 9.81; // in m/s^2
-const TIME_STEP: number = 0.01; // in seconds
+const TIME_STEP = 0.01; // in seconds
+const COLLISION_THRESHOLD = 0.5; // in meters
+const COLLISION_CHECK_INTERVAL = 0.1; // in seconds
 
 class Pendulum {
   private state: PendulumState;
   private simulationInterval: NodeJS.Timeout | null;
+  private collisionCheckInterval: NodeJS.Timeout | null;
 
   constructor() {
     this.state = {
@@ -17,8 +21,11 @@ class Pendulum {
       velocity: 0,
       state: "stopped",
       color: "#FF0000",
+      hasCollision: false,
+      neighborsURL: [],
     };
     this.simulationInterval = null;
+    this.collisionCheckInterval = null;
   }
 
   private simulateStep(): void {
@@ -38,6 +45,56 @@ class Pendulum {
     };
   }
 
+  private calculateMassPosition(pendulumState: PendulumState): Position {
+    const { anchorPosition, angle, length } = pendulumState;
+    return {
+      x: anchorPosition.x + length * Math.sin(angle),
+      y: anchorPosition.y + length * Math.cos(angle),
+    };
+  }
+
+  private async checkForCollisions(): Promise<void> {
+    const neighborURLs = this.state.neighborsURL;
+    let collisionDetected = false;
+
+    for (const url of neighborURLs) {
+      try {
+        const response = await fetch(`${url}/pendulum/state`);
+        if (!response.ok) {
+          console.error(`Error fetching state from neighbor at ${url}`);
+          continue;
+        }
+        const neighborState = (await response.json()) as PendulumState;
+        const collision = this.detectCollision(neighborState);
+        if (collision) {
+          collisionDetected = true;
+        }
+      } catch (error) {
+        console.error(`Error connecting to neighbor at ${url}:`, error);
+      }
+    }
+
+    this.state.hasCollision = collisionDetected;
+  }
+
+  private detectCollision(neighborState: PendulumState): boolean {
+    const myPosition = this.getMassPosition();
+    const neighborPosition = this.calculateMassPosition(neighborState);
+    const distance = Math.sqrt(
+      (myPosition.x - neighborPosition.x) ** 2 +
+        (myPosition.y - neighborPosition.y) ** 2
+    );
+    const combinedRadius = this.state.radius + neighborState.radius;
+    return distance <= combinedRadius + COLLISION_THRESHOLD;
+  }
+
+  private scheduleCollisionCheck(): void {
+    this.collisionCheckInterval = setTimeout(async () => {
+      await this.checkForCollisions();
+      this.scheduleCollisionCheck();
+    }, COLLISION_CHECK_INTERVAL * 1000);
+  }
+
   public start(): void {
     if (!this.simulationInterval) {
       this.simulationInterval = setInterval(
@@ -45,12 +102,19 @@ class Pendulum {
         TIME_STEP * 1000
       );
     }
+    if (!this.collisionCheckInterval) {
+      this.scheduleCollisionCheck();
+    }
   }
 
   public stop(): void {
     if (this.simulationInterval) {
       clearInterval(this.simulationInterval);
       this.simulationInterval = null;
+    }
+    if (this.collisionCheckInterval) {
+      clearTimeout(this.collisionCheckInterval);
+      this.collisionCheckInterval = null;
     }
   }
 
