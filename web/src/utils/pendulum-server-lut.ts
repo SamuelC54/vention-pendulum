@@ -1,3 +1,5 @@
+export const pendulumIds = ['1', '2', '3', '4', '5'];
+
 export const pendulumServerLUT: Record<string, string | undefined> = {
   '1': process.env.NEXT_PUBLIC_PENDULUM_1_URL,
   '2': process.env.NEXT_PUBLIC_PENDULUM_2_URL,

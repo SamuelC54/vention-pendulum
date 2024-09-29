@@ -1,11 +1,12 @@
 'use client';
 
-import { UseMutationResult } from '@tanstack/react-query';
 import { useAtomValue } from 'jotai';
 
-import { useSetPendulumInitialState } from '@/services/set-pendulum-initial-state';
+import { useContinuePendulumsSimulation } from '@/services/continue-pendulums-simulation';
+import { usePausePendulumsSimulation } from '@/services/pause-pendulums-simulation';
+import { useSetPendulumsInitialState } from '@/services/set-pendulums-initial-state';
+import { useStopPendulumsSimulation } from '@/services/stop-pendulums-simulation';
 import { pendulumsConfigAtom, simulationStateAtom } from '@/stores/general';
-import { PendulumState } from '@/utils/types';
 
 import { Button } from '../ui/button';
 import { PendulumCard } from './pendulum-card';
@@ -13,52 +14,56 @@ import { PendulumCard } from './pendulum-card';
 export function Controls() {
   const pendulumsConfig = useAtomValue(pendulumsConfigAtom);
   const simulationState = useAtomValue(simulationStateAtom);
+  const pausePendulumsSimulation = usePausePendulumsSimulation();
+  const stopPendulumsSimulation = useStopPendulumsSimulation();
+  const continuePendulumsSimulation = useContinuePendulumsSimulation();
 
-  const setPendulum1InitialState = useSetPendulumInitialState('1');
-  const setPendulum2InitialState = useSetPendulumInitialState('2');
-  const setPendulum3InitialState = useSetPendulumInitialState('3');
-  const setPendulum4InitialState = useSetPendulumInitialState('4');
-  const setPendulum5InitialState = useSetPendulumInitialState('5');
-
-  function handleStartSimulation() {
-    const setPendulumInitialStateLUT: Record<
-      string,
-      UseMutationResult<any, Error, PendulumState, unknown>
-    > = {
-      '1': setPendulum1InitialState,
-      '2': setPendulum2InitialState,
-      '3': setPendulum3InitialState,
-      '4': setPendulum4InitialState,
-      '5': setPendulum5InitialState,
-    };
-
-    for (const pendulumConfig of pendulumsConfig) {
-      const setPendulumInitialStateMutation =
-        setPendulumInitialStateLUT[pendulumConfig.id];
-
-      setPendulumInitialStateMutation.mutate(pendulumConfig);
-    }
-  }
+  const setPendulumsInitialState = useSetPendulumsInitialState();
 
   return (
     <div className={'flex w-[300px] flex-col gap-2'}>
       <div className="text-sm">Controls</div>
       {simulationState === 'off' && (
-        <Button onClick={handleStartSimulation}>Start Simulation</Button>
+        <Button
+          onClick={() => {
+            setPendulumsInitialState.mutate(pendulumsConfig);
+          }}
+        >
+          Start Simulation
+        </Button>
       )}
       {simulationState !== 'off' && (
         <div className="flex gap-2">
           {simulationState === 'running' && (
-            <Button variant={'outline'} className="flex-1">
+            <Button
+              variant={'outline'}
+              className="flex-1"
+              onClick={() => {
+                pausePendulumsSimulation.mutate();
+              }}
+            >
               Pause
             </Button>
           )}
           {simulationState === 'stopped' && (
-            <Button variant={'outline'} className="flex-1">
+            <Button
+              variant={'outline'}
+              className="flex-1"
+              onClick={() => {
+                continuePendulumsSimulation.mutate();
+              }}
+            >
               Continue
             </Button>
           )}
-          <Button className="flex-1">Stop</Button>
+          <Button
+            className="flex-1"
+            onClick={() => {
+              stopPendulumsSimulation.mutate();
+            }}
+          >
+            Stop
+          </Button>
         </div>
       )}
       <div className="mt-2 flex items-center">

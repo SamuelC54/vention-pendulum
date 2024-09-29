@@ -5,7 +5,7 @@ import { useAtomValue } from 'jotai';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { calculateEndPoint } from '@/helpers/calculate-end-point';
-import { useGetAllPendulumState } from '@/helpers/use-get-all-pendulum-state';
+import { useGetPendulumsState } from '@/services/get-pendulums-state';
 import { pendulumsConfigAtom, simulationStateAtom } from '@/stores/general';
 import { PendulumState } from '@/utils/types';
 
@@ -27,13 +27,14 @@ export function SimulationCanvas() {
   const pendulumsConfig = useAtomValue(pendulumsConfigAtom);
   const simulationState = useAtomValue(simulationStateAtom);
 
-  const isSimulationRunning = simulationState === 'running';
+  const isSimulationRunning = simulationState !== 'off';
 
-  const serverPendulumState = useGetAllPendulumState();
+  const { data: serverPendulumState } =
+    useGetPendulumsState(isSimulationRunning);
 
   const pendulums: PendulumState[] = !isSimulationRunning
     ? pendulumsConfig
-    : serverPendulumState;
+    : serverPendulumState || [];
 
   // Adjust the stage size based on the Card's size
   useEffect(() => {

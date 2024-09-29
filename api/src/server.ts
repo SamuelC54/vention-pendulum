@@ -97,7 +97,6 @@ function buildServer() {
       angle: { type: "number" },
       length: { type: "number" },
       radius: { type: "number" },
-      mass: { type: "number" },
       velocity: { type: "number" },
       color: { type: "string" },
     },
