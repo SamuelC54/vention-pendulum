@@ -4,11 +4,12 @@ import fetch from "node-fetch";
 
 const GRAVITY = 9.81; // in m/s^2
 const TIME_STEP = 0.01; // in seconds
-const COLLISION_THRESHOLD = 0.5; // in meters
+const COLLISION_THRESHOLD = 1.1; // in meters
 const COLLISION_CHECK_INTERVAL = 0.1; // in seconds
 
 class Pendulum {
   private state: PendulumState;
+  private initialState: PendulumState;
   private simulationInterval: NodeJS.Timeout | null;
   private collisionCheckInterval: NodeJS.Timeout | null;
 
@@ -25,6 +26,7 @@ class Pendulum {
       hasCollision: false,
       neighborsURL: [],
     };
+    this.initialState = { ...this.state };
     this.simulationInterval = null;
     this.collisionCheckInterval = null;
   }
@@ -138,7 +140,13 @@ class Pendulum {
     this.state = {
       ...pendulumState,
     };
+    this.initialState = { ...pendulumState };
     this.start(); // Ensure the simulation is started
+  }
+
+  public restart(): void {
+    this.state = { ...this.initialState };
+    this.start();
   }
 
   public getPendulumState(): PendulumState {

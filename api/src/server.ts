@@ -43,7 +43,7 @@ mqtt_Client.on("message", (topic, message) => {
     if (payload === "restart") {
       // Restart the pendulum if a restart signal is received
       console.log("Restart signal received. Restarting pendulum.");
-      Pendulum.start();
+      Pendulum.restart();
     }
   }
 });
