@@ -1,13 +1,18 @@
-# vention-pendulum
+# Vention-Pendulum
 
-## How to start the project
+## Initial Setup
 
-- Open a terminal and navigate to the `./web` folder
-- Run the following commands:
-  - `npm install`
-  - `npm run dev`
+1. Open a terminal and navigate to the `./web` directory.
+2. Copy the `.env-sample` file to `.env` and ensure that the URLs for all five servers are correctly set.
+3. Run the following commands:
+   - `npm install`
+   - `npm run dev`
 
-- Open another terminal and navigate to the `./api` folder
-- Run the following commands:
-  - `npm install`
-  - `npm run dev` or `npm run compose-up` to run 5 instances for each pendulum
+4. Open another terminal and navigate to the `./api` directory.
+5. Run the following commands:
+   - `npm install`
+   - `npm run compose-up` (this will start 5 Node.js instances for each pendulum along with the MQTT broker).
+
+## API Documentation
+
+- The Swagger documentation for the REST API is accessible at `/docs`. For instance, you can view it at: `http://localhost:3001/docs`.
