@@ -1,5 +1,7 @@
 # Vention-Pendulum Setup Guide
 
+[Software Team Lead - Take Home Assignment.pdf](https://github.com/user-attachments/files/17192616/Software.Team.Lead.-.Take.Home.Assignment.pdf)
+
 ## Prerequisites
 
 - Ensure Docker is installed
