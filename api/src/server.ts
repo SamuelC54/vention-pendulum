@@ -1,6 +1,5 @@
 import Fastify, { FastifyRequest } from "fastify";
 import swagger from "fastify-swagger";
-import { withRefResolver } from "fastify-zod";
 import fastifyCors from "fastify-cors";
 import { version } from "../package.json";
 import pendulum from "./pendulum";
@@ -14,21 +13,18 @@ function buildServer() {
     methods: ["GET", "POST"], // Specify allowed HTTP methods
   });
 
-  server.register(
-    swagger,
-    withRefResolver({
-      routePrefix: "/docs",
-      exposeRoute: true,
-      staticCSP: true,
-      openapi: {
-        info: {
-          title: "Pendulum API",
-          description: "API for managing a pendulum simulation",
-          version,
-        },
+  server.register(swagger, {
+    routePrefix: "/docs",
+    exposeRoute: true,
+    staticCSP: true,
+    openapi: {
+      info: {
+        title: "Pendulum API",
+        description: "API for managing a pendulum simulation",
+        version,
       },
-    })
-  );
+    },
+  });
 
   // Health Check Endpoint
   server.get(
