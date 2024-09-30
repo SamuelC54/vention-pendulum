@@ -1,5 +1,10 @@
-# Vention-Pendulum
+# Vention-Pendulum Setup Guide
 
+## Prerequisites
+
+- Ensure Docker is installed
+- Node.js and npm are required
+  
 ## Initial Setup
 
 1. Open a terminal and navigate to the `./web` directory.
