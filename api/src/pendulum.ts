@@ -1,4 +1,4 @@
-import { mqtt_Client } from "./server";
+import { mqtt_Client } from "./mqtt";
 import { PendulumState, Position } from "./utils/types";
 import fetch from "node-fetch";
 
@@ -40,7 +40,7 @@ class Pendulum {
     }
   }
 
-  private getMassPosition(): Position {
+  public getMassPosition(): Position {
     const { anchorPosition, angle, length } = this.state;
     return {
       x: anchorPosition.x + length * Math.sin(angle),
@@ -85,7 +85,7 @@ class Pendulum {
     this.state.hasCollision = collisionDetected;
   }
 
-  private detectCollision(neighborState: PendulumState): boolean {
+  public detectCollision(neighborState: PendulumState): boolean {
     const myPosition = this.getMassPosition();
     const neighborPosition = this.calculateMassPosition(neighborState);
     const distance = Math.sqrt(
@@ -96,7 +96,7 @@ class Pendulum {
     return distance <= combinedRadius + COLLISION_THRESHOLD;
   }
 
-  private scheduleCollisionCheck(): void {
+  public scheduleCollisionCheck(): void {
     this.collisionCheckInterval = setTimeout(async () => {
       await this.checkForCollisions();
       this.scheduleCollisionCheck();

@@ -3,50 +3,8 @@ import swagger from "fastify-swagger";
 import { withRefResolver } from "fastify-zod";
 import fastifyCors from "fastify-cors";
 import { version } from "../package.json";
-import Pendulum from "./pendulum";
+import pendulum from "./pendulum";
 import { PendulumState } from "./utils/types";
-import mqtt from "mqtt";
-
-const mqttBrokerUrl = `${process.env.MQTT_BROKER}:${process.env.MQTT_PORT}`;
-
-export const mqtt_Client = mqtt.connect(`mqtt://${mqttBrokerUrl}`);
-
-mqtt_Client.on("connect", () => {
-  console.log(`Connected to  MQTT broker at ${mqttBrokerUrl}`);
-
-  // Subscribe to the collision alert channel
-  mqtt_Client.subscribe("collision/alert", (err) => {
-    if (!err) {
-      console.log("Subscribed to topic: collision/alert");
-    }
-  });
-});
-
-mqtt_Client.on("message", (topic, message) => {
-  if (topic === "collision/alert") {
-    const payload = message.toString();
-    if (payload === "stop") {
-      // Stop the pendulum if a collision is detected
-      console.log("Collision detected! Stopping pendulum.");
-      Pendulum.stop();
-      // After 5 seconds, send a signal to restart
-      setTimeout(() => {
-        console.log("Sending restart signal after 5 seconds...");
-        mqtt_Client.publish("collision/alert", "restart", (err) => {
-          if (err) {
-            console.error("Error sending restart signal:", err);
-          }
-        });
-      }, 5000); // 5000 ms = 5 seconds
-    }
-
-    if (payload === "restart") {
-      // Restart the pendulum if a restart signal is received
-      console.log("Restart signal received. Restarting pendulum.");
-      Pendulum.restart();
-    }
-  }
-});
 
 function buildServer() {
   const server = Fastify();
@@ -181,7 +139,7 @@ function buildServer() {
       },
     },
     async function () {
-      return Pendulum.getPendulumState();
+      return pendulum.getPendulumState();
     }
   );
 
@@ -204,10 +162,10 @@ function buildServer() {
       },
     },
     async function () {
-      Pendulum.setState("running");
+      pendulum.setState("running");
       return {
         message: "Pendulum started",
-        state: Pendulum.getPendulumState(),
+        state: pendulum.getPendulumState(),
       };
     }
   );
@@ -231,10 +189,10 @@ function buildServer() {
       },
     },
     async function () {
-      Pendulum.setState("stopped");
+      pendulum.setState("stopped");
       return {
         message: "Pendulum stopped",
-        state: Pendulum.getPendulumState(),
+        state: pendulum.getPendulumState(),
       };
     }
   );
@@ -264,10 +222,10 @@ function buildServer() {
       }>
     ) {
       const initialState: PendulumState = request.body;
-      Pendulum.setInitialState(initialState);
+      pendulum.setInitialState(initialState);
       return {
         message: "Pendulum initial state set",
-        state: Pendulum.getPendulumState(),
+        state: pendulum.getPendulumState(),
       };
     }
   );

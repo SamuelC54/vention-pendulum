@@ -1,10 +1,12 @@
 import { test } from "tap";
 import buildServer from "../server";
+import { mqtt_Client } from "../mqtt";
 
 test("requests the `/healthcheck` route", async (t) => {
   const fastify = buildServer();
 
   t.teardown(() => {
+    mqtt_Client.end();
     fastify.close();
   });
 
