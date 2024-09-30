@@ -16,3 +16,8 @@
 ## API Documentation
 
 - The Swagger documentation for the REST API is accessible at `/docs`. For instance, you can view it at: `http://localhost:3001/docs`.
+
+## Video Demo
+
+https://github.com/user-attachments/assets/854620da-2363-4514-bc8f-eef306c1821c
+
