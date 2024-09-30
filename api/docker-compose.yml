@@ -1,6 +1,15 @@
 version: '3.8'
 
 services:
+  mqtt-broker:
+    image: eclipse-mosquitto
+    container_name: mqtt-broker
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./libs/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf  # Mount the config file
+
   server1:
     container_name: pendulum-1
     build:
@@ -10,6 +19,8 @@ services:
       - "3001:3001"
     environment:
       - PORT=3001
+      - MQTT_BROKER=mqtt-broker     # Use service name
+      - MQTT_PORT=1883
     volumes:
       - .:/app
     command: npm run dev
@@ -23,6 +34,8 @@ services:
       - "3002:3002"
     environment:
       - PORT=3002
+      - MQTT_BROKER=mqtt-broker     # Use service name
+      - MQTT_PORT=1883
     volumes:
       - .:/app
     command: npm run dev
@@ -36,6 +49,8 @@ services:
       - "3003:3003"
     environment:
       - PORT=3003
+      - MQTT_BROKER=mqtt-broker     # Use service name
+      - MQTT_PORT=1883
     volumes:
       - .:/app
     command: npm run dev
@@ -49,6 +64,8 @@ services:
       - "3004:3004"
     environment:
       - PORT=3004
+      - MQTT_BROKER=mqtt-broker     # Use service name
+      - MQTT_PORT=1883
     volumes:
       - .:/app
     command: npm run dev
@@ -62,6 +79,8 @@ services:
       - "3005:3005"
     environment:
       - PORT=3005
+      - MQTT_BROKER=mqtt-broker     # Use service name
+      - MQTT_PORT=1883
     volumes:
       - .:/app
     command: npm run dev
