@@ -9,6 +9,7 @@
     "openapi",
     "pixi",
     "plusplus",
+    "protoc",
     "randomcolor",
     "tailwindcss",
     "tanstack",

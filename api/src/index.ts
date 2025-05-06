@@ -1,21 +1,25 @@
 require("dotenv").config();
 
 import buildServer from "./server";
+import { ServerCredentials } from "@grpc/grpc-js";
 
-const server = buildServer();
+const port = process.env.PORT ? parseInt(process.env.PORT) : 50051;
 
-const port = process.env.PORT ? parseInt(process.env.PORT) : 3001;
+function main() {
+  const server = buildServer();
 
-async function main() {
-  try {
-    await server.listen(port, "0.0.0.0");
+  server.bindAsync(
+    `0.0.0.0:${port}`,
+    ServerCredentials.createInsecure(),
+    (err, actualPort) => {
+      if (err) {
+        console.error("Failed to start gRPC server:", err);
+        process.exit(1);
+      }
 
-    console.log(`Server ready at http://localhost:${port}`);
-    console.log(`Swagger ready at http://localhost:${port}/docs`);
-  } catch (e) {
-    console.error(e);
-    process.exit(1);
-  }
+      console.log(`🚀 gRPC server running at 0.0.0.0:${actualPort}`);
+    }
+  );
 }
 
 main();

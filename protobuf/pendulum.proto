@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package pendulum;
+
+message Position {
+  double x = 1;
+  double y = 2;
+}
+
+enum SimulationState {
+  RUNNING = 0;
+  STOPPED = 1;
+}
+
+message PendulumState {
+  string id = 1;
+  Position anchorPosition = 2;
+  double angle = 3;
+  double length = 4;
+  double radius = 5;
+  double velocity = 6;
+  string color = 7;
+  SimulationState state = 8;
+  bool hasCollision = 9;
+  repeated string neighborsURL = 10;
+}
+
+message Empty {}
+message MessageWithState {
+  string message = 1;
+  PendulumState state = 2;
+}
+
+message SetInitialStateRequest {
+  PendulumState state = 1;
+}
+
+service PendulumService {
+  rpc HealthCheck(Empty) returns (MessageWithState);
+  rpc GetPendulumState(Empty) returns (PendulumState);
+  rpc StartPendulum(Empty) returns (MessageWithState);
+  rpc StopPendulum(Empty) returns (MessageWithState);
+  rpc SetInitialState(SetInitialStateRequest) returns (MessageWithState);
+}
