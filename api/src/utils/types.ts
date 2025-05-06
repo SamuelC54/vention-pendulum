@@ -1,5 +1,7 @@
 // Need to be in sync with the client side types
 
+import { SimulationState } from "../_generated/proto/pendulum/SimulationState";
+
 export interface Position {
   x: number;
   y: number;
@@ -13,7 +15,7 @@ export interface PendulumState {
   radius: number; // Mass radius
   velocity: number;
   color: string; // Color of the pendulum
-  state: "running" | "stopped";
+  simulationState: SimulationState;
   hasCollision: boolean;
   neighborsURL: string[];
 }

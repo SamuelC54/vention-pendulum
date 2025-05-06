@@ -32,3 +32,11 @@ Avoid keeping the browser's inspector open for too long, as it may cause lag due
 
 https://github.com/user-attachments/assets/854620da-2363-4514-bc8f-eef306c1821c
 
+
+
+
+Source:
+
+- https://medium.com/@metalabtech/is-grpc-an-alternative-to-rest-for-front-end-developers-de40edb8e19d
+- https://github.com/badsyntax/grpc-js-typescript/tree/master/examples/ts-protoc-gen
+- https://www.npmjs.com/package/ts-protoc-gen

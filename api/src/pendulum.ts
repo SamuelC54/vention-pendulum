@@ -1,6 +1,8 @@
 import { mqtt_Client } from "./mqtt";
-import { PendulumState, Position } from "./utils/types";
 import fetch from "node-fetch";
+
+import { SimulationState } from "./_generated/proto/pendulum/SimulationState";
+import { PendulumState, Position } from "./utils/types";
 
 const GRAVITY = 9.81; // in m/s^2
 const TIME_STEP = 0.01; // in seconds
@@ -21,7 +23,7 @@ class Pendulum {
       length: 1,
       radius: 0.1,
       velocity: 0,
-      state: "stopped",
+      simulationState: SimulationState.STOPPED,
       color: "#FF0000",
       hasCollision: false,
       neighborsURL: [],
@@ -32,7 +34,7 @@ class Pendulum {
   }
 
   private simulateStep(): void {
-    if (this.state.state === "running") {
+    if (this.state.simulationState === SimulationState.RUNNING) {
       const { angle, length } = this.state;
       const acceleration = -(GRAVITY / length) * Math.sin(angle);
       this.state.velocity += acceleration * TIME_STEP;
@@ -126,12 +128,12 @@ class Pendulum {
     }
   }
 
-  public setState(state: "running" | "stopped"): void {
-    if (state === "running") {
-      this.state.state = "running";
+  public setState(state: SimulationState): void {
+    if (state === SimulationState.RUNNING) {
+      this.state.simulationState = SimulationState.RUNNING;
       this.start();
-    } else if (state === "stopped") {
-      this.state.state = "stopped";
+    } else if (state === SimulationState.STOPPED) {
+      this.state.simulationState = SimulationState.STOPPED;
       this.stop();
     }
   }

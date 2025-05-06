@@ -1,101 +1,50 @@
-import { Server, ServerCredentials } from "@grpc/grpc-js";
-import {
-  PendulumServiceService,
-  IPendulumServiceServer,
-} from "./proto/pendulum_grpc_pb";
-import {
-  PendulumState as ProtoPendulumState,
-  SetInitialStateRequest,
-  Empty,
-  MessageWithState,
-  Position,
-} from "./proto/pendulum_pb";
-
+import path from "path";
+import * as grpc from "@grpc/grpc-js";
+import * as protoLoader from "@grpc/proto-loader";
+import { ProtoGrpcType } from "./_generated/proto/pendulum";
+import { PendulumServiceHandlers } from "./_generated/proto/pendulum/PendulumService";
 import pendulum from "./pendulum";
-import { PendulumState } from "./utils/types";
+import { fromGrpcPendulumState } from "./utils/converter";
 
-function buildServer(): Server {
-  const handlers: IPendulumServiceServer = {
-    HealthCheck: (_, callback) => {
-      const res = new MessageWithState();
-      res.setMessage("OK");
-      callback(null, res);
+const PROTO_FILE = "../../protobuf/pendulum.proto";
+const packageDef = protoLoader.loadSync(path.resolve(__dirname, PROTO_FILE));
+const grpcObj = grpc.loadPackageDefinition(
+  packageDef
+) as unknown as ProtoGrpcType;
+const PendulumClient = grpcObj.pendulum;
+
+export function getServer() {
+  const server = new grpc.Server();
+  server.addService(PendulumClient.PendulumService.service, {
+    HealthCheck: (req, res) => {
+      res(null, { status: "OK" });
     },
-
-    GetPendulumState: (_, callback) => {
-      const state = pendulum.getPendulumState();
-      callback(null, toProtoState(state));
+    GetPendulumState: (req, res) => {
+      res(null, {
+        ...pendulum.getPendulumState(),
+      });
     },
-
-    StartPendulum: (_, callback) => {
-      pendulum.setState("running");
-      const res = new MessageWithState();
-      res.setMessage("Pendulum started");
-      res.setState(toProtoState(pendulum.getPendulumState()));
-      callback(null, res);
+    StartPendulum: (req, res) => {
+      pendulum.start();
+      res(null, {
+        message: "Pendulum started",
+        state: pendulum.getPendulumState(),
+      });
     },
-
-    StopPendulum: (_, callback) => {
-      pendulum.setState("stopped");
-      const res = new MessageWithState();
-      res.setMessage("Pendulum stopped");
-      res.setState(toProtoState(pendulum.getPendulumState()));
-      callback(null, res);
+    StopPendulum: (req, res) => {
+      pendulum.stop();
+      res(null, {
+        message: "Pendulum stopped",
+        state: pendulum.getPendulumState(),
+      });
     },
-
-    SetInitialState: (call, callback) => {
-      const protoState = call.request.getState();
-      if (!protoState) return callback(new Error("Missing state"));
-
-      const jsState = fromProtoState(protoState);
-      pendulum.setInitialState(jsState);
-
-      const res = new MessageWithState();
-      res.setMessage("Initial state set");
-      res.setState(toProtoState(pendulum.getPendulumState()));
-      callback(null, res);
+    SetInitialState: (req, res) => {
+      pendulum.setInitialState(fromGrpcPendulumState(req?.request?.state));
+      res(null, {
+        message: "Pendulum initial state set",
+        state: pendulum.getPendulumState(),
+      });
     },
-  };
-
-  const server = new Server();
-  server.addService(PendulumServiceService, handlers);
+  } as PendulumServiceHandlers);
   return server;
 }
-
-function toProtoState(state: PendulumState): ProtoPendulumState {
-  const proto = new ProtoPendulumState();
-  proto.setId(state.id);
-  const pos = new Position();
-  pos.setX(state.anchorPosition.x);
-  pos.setY(state.anchorPosition.y);
-  proto.setAnchorPosition(pos);
-  proto.setAngle(state.angle);
-  proto.setLength(state.length);
-  proto.setRadius(state.radius);
-  proto.setVelocity(state.velocity);
-  proto.setColor(state.color);
-  proto.setState(state.state === "running" ? 0 : 1);
-  proto.setHasCollision(state.hasCollision);
-  proto.setNeighborsurlList(state.neighborsURL);
-  return proto;
-}
-
-function fromProtoState(proto: ProtoPendulumState): PendulumState {
-  return {
-    id: proto.getId(),
-    anchorPosition: {
-      x: proto.getAnchorPosition()?.getX() ?? 0,
-      y: proto.getAnchorPosition()?.getY() ?? 0,
-    },
-    angle: proto.getAngle(),
-    length: proto.getLength(),
-    radius: proto.getRadius(),
-    velocity: proto.getVelocity(),
-    color: proto.getColor(),
-    state: proto.getState() === 0 ? "running" : "stopped",
-    hasCollision: proto.getHasCollision(),
-    neighborsURL: proto.getNeighborsurlList(),
-  };
-}
-
-export default buildServer;

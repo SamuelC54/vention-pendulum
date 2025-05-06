@@ -1,12 +1,12 @@
 require("dotenv").config();
 
-import buildServer from "./server";
+import { getServer } from "./server";
 import { ServerCredentials } from "@grpc/grpc-js";
 
-const port = process.env.PORT ? parseInt(process.env.PORT) : 50051;
+const port = process.env.PORT ? parseInt(process.env.PORT) : 8082;
 
 function main() {
-  const server = buildServer();
+  const server = getServer();
 
   server.bindAsync(
     `0.0.0.0:${port}`,

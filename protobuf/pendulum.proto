@@ -15,17 +15,22 @@ enum SimulationState {
 message PendulumState {
   string id = 1;
   Position anchorPosition = 2;
-  double angle = 3;
+  float angle = 3;
   double length = 4;
   double radius = 5;
   double velocity = 6;
   string color = 7;
-  SimulationState state = 8;
+  SimulationState simulationState = 8;
   bool hasCollision = 9;
   repeated string neighborsURL = 10;
 }
 
 message Empty {}
+
+message HealthStatus {
+  string status = 1;
+}
+
 message MessageWithState {
   string message = 1;
   PendulumState state = 2;
@@ -36,7 +41,7 @@ message SetInitialStateRequest {
 }
 
 service PendulumService {
-  rpc HealthCheck(Empty) returns (MessageWithState);
+  rpc HealthCheck(Empty) returns (HealthStatus);
   rpc GetPendulumState(Empty) returns (PendulumState);
   rpc StartPendulum(Empty) returns (MessageWithState);
   rpc StopPendulum(Empty) returns (MessageWithState);
