@@ -9,7 +9,9 @@
     "lint": "next lint",
     "tsc": "tsc",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "copy:proto": "shx cp ../api/src/protobuf/pendulum.proto ./src/_generated/pendulum.proto",
+    "postinstall": "npm run copy:proto"
   },
   "dependencies": {
     "@pixi/react": "^7.1.2",
@@ -61,6 +63,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "postcss": "^8",
     "react-test-renderer": "^18.3.1",
+    "shx": "^0.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5"
   }
