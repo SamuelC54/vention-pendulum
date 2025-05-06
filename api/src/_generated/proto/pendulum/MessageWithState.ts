@@ -1,4 +1,4 @@
-// Original file: protobuf/pendulum.proto
+// Original file: src/protobuf/pendulum.proto
 
 import type { PendulumState as _pendulum_PendulumState, PendulumState__Output as _pendulum_PendulumState__Output } from '../pendulum/PendulumState';
 

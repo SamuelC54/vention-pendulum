@@ -1,4 +1,4 @@
-// Original file: protobuf/pendulum.proto
+// Original file: src/protobuf/pendulum.proto
 
 export const SimulationState = {
   RUNNING: 0,

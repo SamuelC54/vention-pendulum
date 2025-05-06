@@ -1,4 +1,4 @@
-// Original file: protobuf/pendulum.proto
+// Original file: src/protobuf/pendulum.proto
 
 import type { Position as _pendulum_Position, Position__Output as _pendulum_Position__Output } from '../pendulum/Position';
 import type { SimulationState as _pendulum_SimulationState, SimulationState__Output as _pendulum_SimulationState__Output } from '../pendulum/SimulationState';

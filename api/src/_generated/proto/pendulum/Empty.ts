@@ -1,4 +1,4 @@
-// Original file: protobuf/pendulum.proto
+// Original file: src/protobuf/pendulum.proto
 
 
 export interface Empty {
