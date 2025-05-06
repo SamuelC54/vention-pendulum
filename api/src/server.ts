@@ -6,7 +6,7 @@ import { PendulumServiceHandlers } from "./_generated/proto/pendulum/PendulumSer
 import pendulum from "./pendulum";
 import { fromGrpcPendulumState } from "./utils/converter";
 
-const PROTO_FILE = "../../protobuf/pendulum.proto";
+const PROTO_FILE = "../protobuf/pendulum.proto";
 const packageDef = protoLoader.loadSync(path.resolve(__dirname, PROTO_FILE));
 const grpcObj = grpc.loadPackageDefinition(
   packageDef

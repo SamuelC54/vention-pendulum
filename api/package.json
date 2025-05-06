@@ -4,10 +4,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsnd --respawn --transpile-only --exit-child --poll src/index.ts",
+    "start-proxy-only": "docker-compose up envoy --no-deps",
     "compose-up": "docker-compose up",
     "compose-down": "docker-compose down",
     "test": "tap --node-arg=--require=ts-node/register",
-    "proto:gen": "rimraf ./src/_generated/proto && proto-loader-gen-types --grpcLib=@grpc/grpc-js --json=true --outDir=src/_generated/proto ../protobuf/pendulum.proto"
+    "proto:gen": "rimraf ./src/_generated/proto && proto-loader-gen-types --grpcLib=@grpc/grpc-js --json=true --outDir=src/_generated/proto ./protobuf/pendulum.proto"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.13.3",

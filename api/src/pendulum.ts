@@ -1,4 +1,3 @@
-import { mqtt_Client } from "./mqtt";
 import fetch from "node-fetch";
 
 import { SimulationState } from "./_generated/proto/pendulum/SimulationState";
@@ -73,11 +72,11 @@ class Pendulum {
         const collision = this.detectCollision(neighborState);
         if (collision) {
           collisionDetected = true;
-          mqtt_Client.publish("collision/alert", "stop", (err) => {
-            if (err) {
-              console.error("Error publishing collision alert:", err);
-            }
-          });
+          // mqtt_Client.publish("collision/alert", "stop", (err) => {
+          //   if (err) {
+          //     console.error("Error publishing collision alert:", err);
+          //   }
+          // });
         }
       } catch (error) {
         console.error(`Error connecting to neighbor at ${url}:`, error);

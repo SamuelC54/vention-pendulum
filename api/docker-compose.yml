@@ -1,14 +1,19 @@
 version: '3.8'
 
 services:
-  mqtt-broker:
-    image: eclipse-mosquitto
-    container_name: mqtt-broker
+  envoy:
+    image: envoyproxy/envoy:v1.28-latest
+    container_name: envoy
     ports:
-      - "1883:1883"
-      - "9001:9001"
+      - "8080:8080"  # gRPC-Web via Envoy
     volumes:
-      - ./libs/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf  # Mount the config file
+      - ./envoy.yaml:/etc/envoy/envoy.yaml  # Your Envoy config
+    depends_on:
+      - server1
+      - server2
+      - server3
+      - server4
+      - server5
 
   server1:
     container_name: pendulum-1
