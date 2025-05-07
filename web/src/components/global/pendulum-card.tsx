@@ -5,7 +5,7 @@ import { set } from 'lodash';
 
 import { degreesToRads, radsToDegrees } from '@/helpers/angles';
 import { cn } from '@/lib/utils';
-import { useGetHealthcheck } from '@/services/get-healthcheck';
+import { useGetHealthcheck } from '@/services/get-healthcheck/use-get-healthcheck';
 import { pendulumsConfigAtom } from '@/stores/general';
 
 import { Card } from '../ui/card';

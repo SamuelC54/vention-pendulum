@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@protos/*": ["./src/_generated/protos/*"]
     },
     "types": ["node", "jest"]
   },
