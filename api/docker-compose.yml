@@ -1,31 +1,15 @@
 version: '3.8'
 
 services:
-  envoy:
-    image: envoyproxy/envoy:v1.28-latest
-    container_name: envoy
-    ports:
-      - "8080:8080"  # gRPC-Web via Envoy
-    volumes:
-      - ./envoy.yaml:/etc/envoy/envoy.yaml  # Your Envoy config
-    depends_on:
-      - server1
-      - server2
-      - server3
-      - server4
-      - server5
-
   server1:
     container_name: pendulum-1
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3001:3001"
+      - "8081:8081"
     environment:
-      - PORT=3001
-      - MQTT_BROKER=mqtt-broker     # Use service name
-      - MQTT_PORT=1883
+      - PORT=8081
     volumes:
       - .:/app
     command: npm run dev
@@ -36,11 +20,9 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3002:3002"
+      - "8082:8082"
     environment:
-      - PORT=3002
-      - MQTT_BROKER=mqtt-broker     # Use service name
-      - MQTT_PORT=1883
+      - PORT=8082
     volumes:
       - .:/app
     command: npm run dev
@@ -51,11 +33,9 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3003:3003"
+      - "8083:8083"
     environment:
-      - PORT=3003
-      - MQTT_BROKER=mqtt-broker     # Use service name
-      - MQTT_PORT=1883
+      - PORT=8083
     volumes:
       - .:/app
     command: npm run dev
@@ -66,11 +46,9 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3004:3004"
+      - "8084:8084"
     environment:
-      - PORT=3004
-      - MQTT_BROKER=mqtt-broker     # Use service name
-      - MQTT_PORT=1883
+      - PORT=8084
     volumes:
       - .:/app
     command: npm run dev
@@ -81,11 +59,9 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3005:3005"
+      - "8085:8085"
     environment:
-      - PORT=3005
-      - MQTT_BROKER=mqtt-broker     # Use service name
-      - MQTT_PORT=1883
+      - PORT=8085
     volumes:
       - .:/app
     command: npm run dev

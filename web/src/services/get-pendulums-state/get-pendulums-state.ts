@@ -13,7 +13,6 @@ export async function getPendulumsState() {
 
         client.GetPendulumState({}, {}, (err, response) => {
           if (err) {
-            console.log('🚀 ~ client.GetPendulumState ~ err:', err);
             reject(err);
             return;
           }
