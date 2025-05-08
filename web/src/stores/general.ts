@@ -77,3 +77,6 @@ export const pendulumsConfigAtom = atom(presetLUT['preset-1']);
 
 export type SimulationState = 'running' | 'stopped' | 'off';
 export const simulationStateAtom = atom<SimulationState>('off');
+
+export type CommunicationMode = 'streaming' | 'pooling';
+export const communicationModeAtom = atom<CommunicationMode>('streaming');

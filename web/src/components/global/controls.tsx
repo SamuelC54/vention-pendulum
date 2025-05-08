@@ -1,19 +1,29 @@
 'use client';
 
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 
 import { useContinuePendulumsSimulation } from '@/services/continue-pendulums-simulation/use-continue-pendulums-simulation';
 import { usePausePendulumsSimulation } from '@/services/pause-pendulums-simulation/use-pause-pendulums-simulation';
 import { useSetPendulumsInitialState } from '@/services/set-pendulums-initial-state/use-set-pendulums-initial-state';
 import { useStopPendulumsSimulation } from '@/services/stop-pendulums-simulation/use-stop-pendulums-simulation';
-import { pendulumsConfigAtom, simulationStateAtom } from '@/stores/general';
+import {
+  CommunicationMode,
+  communicationModeAtom,
+  pendulumsConfigAtom,
+  simulationStateAtom,
+} from '@/stores/general';
 
 import { Button } from '../ui/button';
+import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
 import { PendulumCard } from './pendulum-card';
 
 export function Controls() {
   const pendulumsConfig = useAtomValue(pendulumsConfigAtom);
   const simulationState = useAtomValue(simulationStateAtom);
+  const [communicationMode, setCommunicationMode] = useAtom(
+    communicationModeAtom,
+  );
+
   const pausePendulumsSimulation = usePausePendulumsSimulation();
   const stopPendulumsSimulation = useStopPendulumsSimulation();
   const continuePendulumsSimulation = useContinuePendulumsSimulation();
@@ -23,6 +33,21 @@ export function Controls() {
   return (
     <div className={'flex w-[300px] flex-col gap-2'}>
       <div className="text-sm">Controls</div>
+      <Tabs
+        defaultValue={communicationMode}
+        onValueChange={(value) =>
+          setCommunicationMode(value as CommunicationMode)
+        }
+      >
+        <TabsList className="w-full">
+          <TabsTrigger value={'streaming'} className="w-full">
+            Streaming
+          </TabsTrigger>
+          <TabsTrigger value={'pooling'} className="w-full">
+            Pooling
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
       {simulationState === 'off' && (
         <Button
           onClick={() => {

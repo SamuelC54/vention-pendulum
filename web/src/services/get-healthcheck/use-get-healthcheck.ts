@@ -9,6 +9,6 @@ export const useGetHealthcheck = (pendulumId: string) => {
   return useQuery({
     queryKey: getQueryKey('healthcheck', pendulumId),
     queryFn: () => getHealthcheck(pendulumId),
-    refetchInterval: 5000, // 5 seconds polling
+    refetchInterval: 60000, // 1 min polling
   });
 };

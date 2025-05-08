@@ -7,7 +7,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { calculateEndPoint } from '@/helpers/calculate-end-point';
 import { useGetPendulumsState } from '@/services/get-pendulums-state/use-get-pendulums-state';
 import { useStreamPendulumsState } from '@/services/stream-pendulums-state/use-stream-pendulums-state';
-import { pendulumsConfigAtom, simulationStateAtom } from '@/stores/general';
+import {
+  communicationModeAtom,
+  pendulumsConfigAtom,
+  simulationStateAtom,
+} from '@/stores/general';
 import { PendulumState } from '@/utils/types';
 
 import { Card } from '../ui/card';
@@ -33,16 +37,25 @@ export function SimulationCanvas() {
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   const pendulumsConfig = useAtomValue(pendulumsConfigAtom);
   const simulationState = useAtomValue(simulationStateAtom);
+  const communicationMode = useAtomValue(communicationModeAtom);
 
   const isSimulationRunning = simulationState !== 'off';
 
-  const pendulumStatesById = useStreamPendulumsState(isSimulationRunning);
+  const pendulumStatesById = useStreamPendulumsState(
+    isSimulationRunning && communicationMode === 'streaming',
+  );
+  const { data: serverPendulumState } = useGetPendulumsState(
+    isSimulationRunning && communicationMode === 'pooling',
+  );
 
-  const { data: serverPendulumState } = useGetPendulumsState(false);
+  const serverData =
+    (communicationMode === 'streaming'
+      ? Object.values(pendulumStatesById)
+      : serverPendulumState) || [];
 
   const pendulums: PendulumState[] = !isSimulationRunning
     ? pendulumsConfig
-    : Object.values(pendulumStatesById); // serverPendulumState || [];
+    : serverData;
 
   // Adjust the stage size based on the Card's size
   useEffect(() => {
