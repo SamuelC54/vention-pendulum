@@ -49,7 +49,7 @@ export function getServer() {
       const interval = setInterval(() => {
         const state = pendulum.getPendulumState();
         call.write(state);
-      }, 100); // stream every 100ms
+      }, 10); // stream every Xms
 
       call.on("cancelled", () => {
         clearInterval(interval);

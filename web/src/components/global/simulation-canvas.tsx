@@ -36,14 +36,13 @@ export function SimulationCanvas() {
 
   const isSimulationRunning = simulationState !== 'off';
 
-  const pendulumStatesById = useStreamPendulumsState(true);
+  const pendulumStatesById = useStreamPendulumsState(isSimulationRunning);
 
-  const { data: serverPendulumState } =
-    useGetPendulumsState(isSimulationRunning);
+  const { data: serverPendulumState } = useGetPendulumsState(false);
 
   const pendulums: PendulumState[] = !isSimulationRunning
     ? pendulumsConfig
-    : serverPendulumState || [];
+    : Object.values(pendulumStatesById); // serverPendulumState || [];
 
   // Adjust the stage size based on the Card's size
   useEffect(() => {
