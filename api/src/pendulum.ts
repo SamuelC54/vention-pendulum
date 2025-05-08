@@ -61,27 +61,27 @@ class Pendulum {
     const neighborURLs = this.state.neighborsURL;
     let collisionDetected = false;
 
-    for (const url of neighborURLs) {
-      try {
-        const response = await fetch(`${url}/pendulum/state`);
-        if (!response.ok) {
-          console.error(`Error fetching state from neighbor at ${url}`);
-          continue;
-        }
-        const neighborState = (await response.json()) as PendulumState;
-        const collision = this.detectCollision(neighborState);
-        if (collision) {
-          collisionDetected = true;
-          // mqtt_Client.publish("collision/alert", "stop", (err) => {
-          //   if (err) {
-          //     console.error("Error publishing collision alert:", err);
-          //   }
-          // });
-        }
-      } catch (error) {
-        console.error(`Error connecting to neighbor at ${url}:`, error);
-      }
-    }
+    // for (const url of neighborURLs) {
+    //   try {
+    //     const response = await fetch(`${url}/pendulum/state`);
+    //     if (!response.ok) {
+    //       console.error(`Error fetching state from neighbor at ${url}`);
+    //       continue;
+    //     }
+    //     const neighborState = (await response.json()) as PendulumState;
+    //     const collision = this.detectCollision(neighborState);
+    //     if (collision) {
+    //       collisionDetected = true;
+    //       // mqtt_Client.publish("collision/alert", "stop", (err) => {
+    //       //   if (err) {
+    //       //     console.error("Error publishing collision alert:", err);
+    //       //   }
+    //       // });
+    //     }
+    //   } catch (error) {
+    //     console.error(`Error connecting to neighbor at ${url}:`, error);
+    //   }
+    // }
 
     this.state.hasCollision = collisionDetected;
   }

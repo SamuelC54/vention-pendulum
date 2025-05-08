@@ -1,4 +1,6 @@
-// Need to be in sync with the server side types
+// Need to be in sync with the client side types
+
+import { SimulationState } from '@/_generated/protos/types/pendulum/SimulationState';
 
 export interface Position {
   x: number;
@@ -13,7 +15,7 @@ export interface PendulumState {
   radius: number; // Mass radius
   velocity: number;
   color: string; // Color of the pendulum
-  state: 'running' | 'stopped';
+  simulationState: SimulationState;
   hasCollision: boolean;
   neighborsURL: string[];
 }

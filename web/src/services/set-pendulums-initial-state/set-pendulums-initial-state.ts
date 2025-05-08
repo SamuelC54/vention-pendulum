@@ -14,7 +14,7 @@ export async function setPendulumsInitialState(newStates: PendulumState[]) {
       new Promise<MessageWithState>((resolve, reject) => {
         const client = createPendulumClient(pendulumPortLUT[newState.id]);
 
-        client.SetInitialState(newState, {}, (err, response) => {
+        client.SetInitialState({ state: newState }, {}, (err, response) => {
           if (err) {
             reject(err);
             return;

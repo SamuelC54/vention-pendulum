@@ -1,4 +1,4 @@
-import { pendulumServerLUT } from '@/utils/pendulum-server-lut';
+import { pendulumPortLUT } from '@/utils/pendulum-server-lut';
 import { PendulumState } from '@/utils/types';
 
 export function assignNeighbors(pendulums: PendulumState[]): PendulumState[] {
@@ -12,7 +12,7 @@ export function assignNeighbors(pendulums: PendulumState[]): PendulumState[] {
 
     if (index > 0) {
       const leftNeighbor = sortedPendulums[index - 1];
-      const leftNeighborURL = pendulumServerLUT[leftNeighbor.id];
+      const leftNeighborURL = pendulumPortLUT[leftNeighbor.id];
 
       if (leftNeighborURL) {
         updatedPendulum.neighborsURL.push(leftNeighborURL);
@@ -21,7 +21,7 @@ export function assignNeighbors(pendulums: PendulumState[]): PendulumState[] {
 
     if (index < sortedPendulums.length - 1) {
       const rightNeighbor = sortedPendulums[index + 1];
-      const rightNeighborURL = pendulumServerLUT[rightNeighbor.id];
+      const rightNeighborURL = pendulumPortLUT[rightNeighbor.id];
 
       if (rightNeighborURL) {
         updatedPendulum.neighborsURL.push(rightNeighborURL);

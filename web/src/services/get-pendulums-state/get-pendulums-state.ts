@@ -1,8 +1,9 @@
 'use server';
 
-import { PendulumState } from '@/_generated/protos/types/pendulum/PendulumState';
 import createPendulumClient from '@/client';
+import { fromGrpcPendulumState } from '@/helpers/converter';
 import { pendulumIds, pendulumPortLUT } from '@/utils/pendulum-server-lut';
+import { PendulumState } from '@/utils/types';
 
 export async function getPendulumsState() {
   const requests = pendulumIds.map(
@@ -12,6 +13,7 @@ export async function getPendulumsState() {
 
         client.GetPendulumState({}, {}, (err, response) => {
           if (err) {
+            console.log('🚀 ~ client.GetPendulumState ~ err:', err);
             reject(err);
             return;
           }
@@ -19,7 +21,7 @@ export async function getPendulumsState() {
             reject(new Error(`No state returned from startPendulum for ${id}`));
             return;
           }
-          resolve(response);
+          resolve(fromGrpcPendulumState(response));
         });
       }),
   );

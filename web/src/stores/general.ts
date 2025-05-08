@@ -1,5 +1,6 @@
 import { atom } from 'jotai';
 
+import { SimulationState as PendulumSimulationState } from '@/_generated/protos/types/pendulum/SimulationState';
 import { degreesToRads } from '@/helpers/angles';
 import { PendulumState } from '@/utils/types';
 
@@ -16,7 +17,7 @@ const presetLUT: PresetLUT = {
       radius: 2,
       color: '#3498db',
       velocity: 0,
-      state: 'running',
+      simulationState: PendulumSimulationState.RUNNING,
       hasCollision: false,
       neighborsURL: [],
     },
@@ -28,7 +29,7 @@ const presetLUT: PresetLUT = {
       radius: 3,
       color: '#2ecc71',
       velocity: 0,
-      state: 'running',
+      simulationState: PendulumSimulationState.RUNNING,
       hasCollision: false,
       neighborsURL: [],
     },
@@ -40,7 +41,7 @@ const presetLUT: PresetLUT = {
       radius: 1,
       color: '#f1c40f',
       velocity: 0,
-      state: 'running',
+      simulationState: PendulumSimulationState.RUNNING,
       hasCollision: false,
       neighborsURL: [],
     },
@@ -52,7 +53,7 @@ const presetLUT: PresetLUT = {
       radius: 5,
       color: '#e74c3c',
       velocity: 0,
-      state: 'running',
+      simulationState: PendulumSimulationState.RUNNING,
       hasCollision: false,
       neighborsURL: [],
     },
@@ -64,7 +65,7 @@ const presetLUT: PresetLUT = {
       radius: 2,
       color: '#9b59b6',
       velocity: 0,
-      state: 'running',
+      simulationState: PendulumSimulationState.RUNNING,
       hasCollision: false,
       neighborsURL: [],
     },
