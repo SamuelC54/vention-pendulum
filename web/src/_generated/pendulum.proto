@@ -46,4 +46,5 @@ service PendulumService {
   rpc StartPendulum(Empty) returns (MessageWithState);
   rpc StopPendulum(Empty) returns (MessageWithState);
   rpc SetInitialState(SetInitialStateRequest) returns (MessageWithState);
+  rpc StreamPendulumState(Empty) returns (stream PendulumState);
 }

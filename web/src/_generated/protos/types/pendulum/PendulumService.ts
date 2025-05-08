@@ -54,6 +54,11 @@ export interface PendulumServiceClient extends grpc.Client {
   stopPendulum(argument: _pendulum_Empty, options: grpc.CallOptions, callback: grpc.requestCallback<_pendulum_MessageWithState__Output>): grpc.ClientUnaryCall;
   stopPendulum(argument: _pendulum_Empty, callback: grpc.requestCallback<_pendulum_MessageWithState__Output>): grpc.ClientUnaryCall;
   
+  StreamPendulumState(argument: _pendulum_Empty, metadata: grpc.Metadata, options?: grpc.CallOptions): grpc.ClientReadableStream<_pendulum_PendulumState__Output>;
+  StreamPendulumState(argument: _pendulum_Empty, options?: grpc.CallOptions): grpc.ClientReadableStream<_pendulum_PendulumState__Output>;
+  streamPendulumState(argument: _pendulum_Empty, metadata: grpc.Metadata, options?: grpc.CallOptions): grpc.ClientReadableStream<_pendulum_PendulumState__Output>;
+  streamPendulumState(argument: _pendulum_Empty, options?: grpc.CallOptions): grpc.ClientReadableStream<_pendulum_PendulumState__Output>;
+  
 }
 
 export interface PendulumServiceHandlers extends grpc.UntypedServiceImplementation {
@@ -67,6 +72,8 @@ export interface PendulumServiceHandlers extends grpc.UntypedServiceImplementati
   
   StopPendulum: grpc.handleUnaryCall<_pendulum_Empty__Output, _pendulum_MessageWithState>;
   
+  StreamPendulumState: grpc.handleServerStreamingCall<_pendulum_Empty__Output, _pendulum_PendulumState>;
+  
 }
 
 export interface PendulumServiceDefinition extends grpc.ServiceDefinition {
@@ -75,4 +82,5 @@ export interface PendulumServiceDefinition extends grpc.ServiceDefinition {
   SetInitialState: MethodDefinition<_pendulum_SetInitialStateRequest, _pendulum_MessageWithState, _pendulum_SetInitialStateRequest__Output, _pendulum_MessageWithState__Output>
   StartPendulum: MethodDefinition<_pendulum_Empty, _pendulum_MessageWithState, _pendulum_Empty__Output, _pendulum_MessageWithState__Output>
   StopPendulum: MethodDefinition<_pendulum_Empty, _pendulum_MessageWithState, _pendulum_Empty__Output, _pendulum_MessageWithState__Output>
+  StreamPendulumState: MethodDefinition<_pendulum_Empty, _pendulum_PendulumState, _pendulum_Empty__Output, _pendulum_PendulumState__Output>
 }

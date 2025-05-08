@@ -45,6 +45,16 @@ export function getServer() {
         state: pendulum.getPendulumState(),
       });
     },
+    StreamPendulumState: (call) => {
+      const interval = setInterval(() => {
+        const state = pendulum.getPendulumState();
+        call.write(state);
+      }, 100); // stream every 100ms
+
+      call.on("cancelled", () => {
+        clearInterval(interval);
+      });
+    },
   } as PendulumServiceHandlers);
   return server;
 }

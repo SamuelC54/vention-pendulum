@@ -11,8 +11,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "copy:proto": "shx cp ../api/src/protobuf/pendulum.proto ./src/_generated/pendulum.proto",
-    "postinstall": "npm run copy:proto",
-    "proto:gen": "proto-loader-gen-types --longs=String --enums=String --defaults --includeComments -I ./src/_generated  -O ./src/_generated/protos/types --grpcLib @grpc/grpc-js pendulum.proto"
+    "proto:gen": "npm run copy:proto && proto-loader-gen-types --longs=String --enums=String --defaults --includeComments -I ./src/_generated  -O ./src/_generated/protos/types --grpcLib @grpc/grpc-js pendulum.proto"
   },
   "dependencies": {
     "@pixi/react": "^7.1.2",

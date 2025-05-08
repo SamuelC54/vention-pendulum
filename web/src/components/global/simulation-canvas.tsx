@@ -5,6 +5,7 @@ import { useAtomValue } from 'jotai';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { calculateEndPoint } from '@/helpers/calculate-end-point';
+import { subscribeToPendulumState } from '@/services/get-pendulums-state/subscribe-to-pendulums-state';
 import { useGetPendulumsState } from '@/services/get-pendulums-state/use-get-pendulums-state';
 import { pendulumsConfigAtom, simulationStateAtom } from '@/stores/general';
 import { PendulumState } from '@/utils/types';
@@ -34,6 +35,23 @@ export function SimulationCanvas() {
   const simulationState = useAtomValue(simulationStateAtom);
 
   const isSimulationRunning = simulationState !== 'off';
+
+  useEffect(() => {
+    const setup = async () => {
+      const stream = await subscribeToPendulumState('1');
+      const reader = stream.getReader();
+
+      while (true) {
+        // eslint-disable-next-line no-await-in-loop
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        console.log(`data: ${JSON.stringify(value)}\n\n`);
+      }
+    };
+
+    setup();
+  }, []);
 
   const { data: serverPendulumState } =
     useGetPendulumsState(isSimulationRunning);
