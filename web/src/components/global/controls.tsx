@@ -5,7 +5,7 @@ import { useAtomValue } from 'jotai';
 import { useContinuePendulumsSimulation } from '@/services/continue-pendulums-simulation/use-continue-pendulums-simulation';
 import { usePausePendulumsSimulation } from '@/services/pause-pendulums-simulation/use-pause-pendulums-simulation';
 import { useSetPendulumsInitialState } from '@/services/set-pendulums-initial-state';
-import { useStopPendulumsSimulation } from '@/services/stop-pendulums-simulation';
+import { useStopPendulumsSimulation } from '@/services/stop-pendulums-simulation/use-stop-pendulums-simulation';
 import { pendulumsConfigAtom, simulationStateAtom } from '@/stores/general';
 
 import { Button } from '../ui/button';
