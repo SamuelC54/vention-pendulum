@@ -10,7 +10,7 @@ const packageDef = protoLoader.loadSync(PROTO_FILE, {
   enums: String,
   defaults: true,
   oneofs: true,
-  includeDirs: ['./_generated/'],
+  includeDirs: ['.'],
 });
 const grpcObj = grpc.loadPackageDefinition(
   packageDef,

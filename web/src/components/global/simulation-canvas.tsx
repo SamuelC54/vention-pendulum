@@ -1,11 +1,12 @@
 'use client';
 
 import { Graphics, Stage } from '@pixi/react';
+import { readStreamableValue } from 'ai/rsc';
 import { useAtomValue } from 'jotai';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { calculateEndPoint } from '@/helpers/calculate-end-point';
-import { subscribeToPendulumState } from '@/services/get-pendulums-state/subscribe-to-pendulums-state';
+import { streamPendulumState } from '@/services/get-pendulums-state/stream-pendulum-state';
 import { useGetPendulumsState } from '@/services/get-pendulums-state/use-get-pendulums-state';
 import { pendulumsConfigAtom, simulationStateAtom } from '@/stores/general';
 import { PendulumState } from '@/utils/types';
@@ -37,20 +38,22 @@ export function SimulationCanvas() {
   const isSimulationRunning = simulationState !== 'off';
 
   useEffect(() => {
-    const setup = async () => {
-      const stream = await subscribeToPendulumState('1');
-      const reader = stream.getReader();
+    let active = true;
 
-      while (true) {
-        // eslint-disable-next-line no-await-in-loop
-        const { value, done } = await reader.read();
-        if (done) break;
+    const streamData = async () => {
+      const { output } = await streamPendulumState('1');
 
-        console.log(`data: ${JSON.stringify(value)}\n\n`);
+      for await (const state of readStreamableValue(output)) {
+        if (!active) break;
+        console.log(state);
       }
     };
 
-    setup();
+    streamData();
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   const { data: serverPendulumState } =
