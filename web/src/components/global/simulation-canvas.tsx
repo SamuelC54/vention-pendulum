@@ -5,7 +5,7 @@ import { useAtomValue } from 'jotai';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { calculateEndPoint } from '@/helpers/calculate-end-point';
-import { useGetPendulumsState } from '@/services/get-pendulums-state';
+import { useGetPendulumsState } from '@/services/get-pendulums-state/use-get-pendulums-state';
 import { pendulumsConfigAtom, simulationStateAtom } from '@/stores/general';
 import { PendulumState } from '@/utils/types';
 
