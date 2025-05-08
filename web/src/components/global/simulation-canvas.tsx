@@ -1,13 +1,12 @@
 'use client';
 
 import { Graphics, Stage } from '@pixi/react';
-import { readStreamableValue } from 'ai/rsc';
 import { useAtomValue } from 'jotai';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { calculateEndPoint } from '@/helpers/calculate-end-point';
-import { streamPendulumState } from '@/services/get-pendulums-state/stream-pendulum-state';
 import { useGetPendulumsState } from '@/services/get-pendulums-state/use-get-pendulums-state';
+import { useStreamPendulumsState } from '@/services/stream-pendulums-state/use-stream-pendulums-state';
 import { pendulumsConfigAtom, simulationStateAtom } from '@/stores/general';
 import { PendulumState } from '@/utils/types';
 
@@ -37,24 +36,7 @@ export function SimulationCanvas() {
 
   const isSimulationRunning = simulationState !== 'off';
 
-  useEffect(() => {
-    let active = true;
-
-    const streamData = async () => {
-      const { output } = await streamPendulumState('1');
-
-      for await (const state of readStreamableValue(output)) {
-        if (!active) break;
-        console.log(state);
-      }
-    };
-
-    streamData();
-
-    return () => {
-      active = false;
-    };
-  }, []);
+  const pendulumStatesById = useStreamPendulumsState(true);
 
   const { data: serverPendulumState } =
     useGetPendulumsState(isSimulationRunning);
