@@ -1,3 +1,5 @@
+'use server';
+
 import { MessageWithState } from '@/_generated/protos/types/pendulum/MessageWithState';
 import createPendulumClient from '@/client';
 import { pendulumIds, pendulumPortLUT } from '@/utils/pendulum-server-lut';
